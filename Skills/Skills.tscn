@@ -1,0 +1,158 @@
+[gd_scene load_steps=3 format=1]
+
+[ext_resource path="res://Skills/Skills.gd" type="Script" id=1]
+[ext_resource path="res://Skills/Skill.tscn" type="PackedScene" id=2]
+
+[node name="Skills" type="Node"]
+
+script/script = ExtResource( 1 )
+
+[node name="Level" parent="." instance=ExtResource( 2 )]
+
+ID = "level"
+score = 1.0
+
+[node name="Crafting" parent="Level" instance=ExtResource( 2 )]
+
+editor/display_folded = true
+ID = "crafting"
+score = 1.0
+
+[node name="Woodworking" parent="Level/Crafting" instance=ExtResource( 2 )]
+
+ID = "woodworking"
+score = 1.0
+
+[node name="Stoneworking" parent="Level/Crafting" instance=ExtResource( 2 )]
+
+ID = "stoneworking"
+score = 1.0
+
+[node name="Metalworking" parent="Level/Crafting" instance=ExtResource( 2 )]
+
+ID = "metalworking"
+score = 1.0
+
+[node name="Earthworking" parent="Level/Crafting" instance=ExtResource( 2 )]
+
+ID = "earthworking"
+score = 1.0
+
+[node name="Clothworking" parent="Level/Crafting" instance=ExtResource( 2 )]
+
+ID = "clothworking"
+score = 1.0
+
+[node name="Labor" parent="Level" instance=ExtResource( 2 )]
+
+editor/display_folded = true
+ID = "labor"
+score = 1.0
+
+[node name="Activity" parent="Level/Labor" instance=ExtResource( 2 )]
+
+ID = "activity"
+score = 1.0
+
+[node name="Tools" parent="Level/Labor" instance=ExtResource( 2 )]
+
+ID = "tools"
+score = 1.0
+
+[node name="Nature" parent="Level" instance=ExtResource( 2 )]
+
+editor/display_folded = true
+ID = "nature"
+score = 1.0
+
+[node name="Athletics" parent="Level/Nature" instance=ExtResource( 2 )]
+
+ID = "athletics"
+score = 1.0
+
+[node name="Farming" parent="Level/Nature" instance=ExtResource( 2 )]
+
+ID = "farming"
+score = 1.0
+
+[node name="Survival" parent="Level/Nature" instance=ExtResource( 2 )]
+
+ID = "survival"
+score = 1.0
+
+[node name="Self" parent="Level" instance=ExtResource( 2 )]
+
+ID = "self"
+score = 1.0
+
+[node name="Body" parent="Level/Self" instance=ExtResource( 2 )]
+
+ID = "body"
+score = 1.0
+
+[node name="Strength" parent="Level/Self/Body" instance=ExtResource( 2 )]
+
+ID = "strength"
+score = 1.0
+
+[node name="Coordination" parent="Level/Self/Body" instance=ExtResource( 2 )]
+
+ID = "coordination"
+score = 1.0
+
+[node name="Endurance" parent="Level/Self/Body" instance=ExtResource( 2 )]
+
+ID = "endurance"
+score = 1.0
+
+[node name="Mind" parent="Level/Self" instance=ExtResource( 2 )]
+
+ID = "mind"
+score = 1.0
+
+[node name="Logic" parent="Level/Self/Mind" instance=ExtResource( 2 )]
+
+ID = "logic"
+score = 1.0
+
+[node name="Wisdom" parent="Level/Self/Mind" instance=ExtResource( 2 )]
+
+ID = "wisdom"
+score = 1.0
+
+[node name="Perception" parent="Level/Self/Mind" instance=ExtResource( 2 )]
+
+ID = "perception"
+score = 1.0
+
+[node name="Soul" parent="Level/Self" instance=ExtResource( 2 )]
+
+ID = "soul"
+score = 1.0
+
+[node name="Essense" parent="Level/Self/Soul" instance=ExtResource( 2 )]
+
+ID = "essense"
+score = 2.976
+
+[node name="Knowledge" parent="Level/Self/Soul" instance=ExtResource( 2 )]
+
+ID = "knowledge"
+score = 2.679
+
+[node name="Sensitivity" parent="Level/Self/Soul" instance=ExtResource( 2 )]
+
+ID = "sensitivity"
+score = 2.9
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+
+playback/process_mode = 1
+playback/default_blend_time = 0.0
+root/root = NodePath("..")
+playback/active = true
+playback/speed = 1.0
+blend_times = [  ]
+autoplay = ""
+
+

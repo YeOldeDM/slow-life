@@ -1,0 +1,711 @@
+[gd_scene load_steps=25 format=1]
+
+[ext_resource path="res://fonts/LiberationSerif-Regular.ttf" type="DynamicFontData" id=1]
+[ext_resource path="res://Main/Main.gd" type="Script" id=2]
+[ext_resource path="res://addons/KOBUGE-games.CircularContainer/CircularContainer.gd" type="Script" id=3]
+[ext_resource path="res://addons/KOBUGE-games.CircularContainer/icon.png" type="Texture" id=4]
+[ext_resource path="res://Skills/SkillsWindow.tscn" type="PackedScene" id=5]
+[ext_resource path="res://Inventory/Inventory.tscn" type="PackedScene" id=6]
+[ext_resource path="res://Options/Options.tscn" type="PackedScene" id=7]
+[ext_resource path="res://Console/Console.tscn" type="PackedScene" id=8]
+[ext_resource path="res://Main/TasksWindow.gd" type="Script" id=9]
+[ext_resource path="res://MessageBox/MessageBox.gd" type="Script" id=10]
+[ext_resource path="res://Task/TaskManager.gd" type="Script" id=11]
+[ext_resource path="res://Main/ObserveWindow.gd" type="Script" id=12]
+[ext_resource path="res://Clock/Clock.tscn" type="PackedScene" id=13]
+[ext_resource path="res://Skills/Skills.tscn" type="PackedScene" id=14]
+[ext_resource path="res://resources/bar_bg.tres" type="StyleBox" id=15]
+[ext_resource path="res://Main/Items.gd" type="Script" id=16]
+[ext_resource path="res://assets/graphics/bg_lightmask.png" type="Texture" id=17]
+[ext_resource path="res://Background/Background.tscn" type="PackedScene" id=18]
+
+[sub_resource type="DynamicFont" id=1]
+
+font/size = 12
+font/use_mipmaps = true
+font/use_filter = true
+font/font = ExtResource( 1 )
+
+[sub_resource type="Theme" id=2]
+
+default_font = SubResource( 1 )
+Button/styles/disabled = null
+Button/styles/focus = null
+Button/styles/normal = null
+Button/styles/pressed = null
+
+[sub_resource type="StyleBoxFlat" id=3]
+
+content_margin/left = -1.0
+content_margin/right = -1.0
+content_margin/top = -1.0
+content_margin/bottom = -1.0
+bg_color = Color( 0.0912933, 0.753906, 0.272477, 1 )
+light_color = Color( 0.8, 0.8, 0.8, 1 )
+dark_color = Color( 0.8, 0.8, 0.8, 1 )
+border_size = 0
+border_blend = true
+draw_bg = true
+
+[sub_resource type="StyleBoxFlat" id=4]
+
+content_margin/left = -1.0
+content_margin/right = -1.0
+content_margin/top = -1.0
+content_margin/bottom = -1.0
+bg_color = Color( 0.133804, 0.610228, 0.925781, 0.84698 )
+light_color = Color( 0.8, 0.8, 0.8, 1 )
+dark_color = Color( 0.8, 0.8, 0.8, 1 )
+border_size = 0
+border_blend = true
+draw_bg = true
+
+[sub_resource type="StyleBoxFlat" id=5]
+
+content_margin/left = -1.0
+content_margin/right = -1.0
+content_margin/top = -1.0
+content_margin/bottom = -1.0
+bg_color = Color( 0.863281, 0.600804, 0.0438385, 0.84698 )
+light_color = Color( 0.8, 0.8, 0.8, 1 )
+dark_color = Color( 0.8, 0.8, 0.8, 1 )
+border_size = 0
+border_blend = true
+draw_bg = true
+
+[sub_resource type="GDScript" id=6]
+
+script/source = "extends TextureFrame\n\nonready var view = get_node(\'../Viewport\')\n\nvar texture = null setget _set_texture\n\nfunc _ready():\n\tset_fixed_process(true)\n\nfunc _fixed_process(delta):\n\tvar tex = view.get_render_target_texture()\n\ttex.set_flags(0)\n\tself.texture = tex\n\nfunc _set_texture(what):\n\ttexture = what\n\tif texture != null:\n\t\tcall_deferred(\'set_texture\',texture)"
+
+[node name="Main" type="Control"]
+
+visibility/light_mask = 1025
+anchor/right = 1
+anchor/bottom = 1
+focus/ignore_mouse = false
+focus/stop_mouse = true
+size_flags/horizontal = 2
+size_flags/vertical = 2
+theme/theme = SubResource( 2 )
+margin/left = 0.0
+margin/top = 0.0
+margin/right = 0.0
+margin/bottom = 0.0
+script/script = ExtResource( 2 )
+
+[node name="World" type="Control" parent="."]
+
+anchor/right = 1
+anchor/bottom = 1
+focus/ignore_mouse = false
+focus/stop_mouse = false
+size_flags/horizontal = 2
+size_flags/vertical = 2
+margin/left = 0.0
+margin/top = 0.0
+margin/right = 0.0
+margin/bottom = 0.0
+
+[node name="CircularContainer" type="Container" parent="World"]
+
+anchor/right = 1
+anchor/bottom = 1
+focus/ignore_mouse = false
+focus/stop_mouse = true
+size_flags/horizontal = 2
+size_flags/vertical = 2
+margin/left = 32.0
+margin/top = 96.0
+margin/right = 32.0
+margin/bottom = 248.0
+script/script = ExtResource( 3 )
+__meta__ = { "_editor_icon":ExtResource( 4 ) }
+arrange/force_squares = false
+arrange/force_expand = true
+arrange/start_angle = 0.0
+arrange/start_empty = true
+arrange/allow_node2d = false
+animate/percent_visible = 1.0
+animate/all_at_once = false
+
+[node name="Skills" parent="." instance=ExtResource( 5 )]
+
+visibility/visible = false
+visibility/self_opacity = 0.8
+
+[node name="Stats" type="WindowDialog" parent="."]
+
+visibility/visible = false
+visibility/self_opacity = 0.8
+focus/ignore_mouse = false
+focus/stop_mouse = true
+size_flags/horizontal = 2
+size_flags/vertical = 2
+margin/left = 288.0
+margin/top = 96.0
+margin/right = 544.0
+margin/bottom = 448.0
+popup/exclusive = false
+window/title = "Stats"
+
+[node name="Inventory" parent="." instance=ExtResource( 6 )]
+
+visibility/visible = false
+
+[node name="Options" parent="." instance=ExtResource( 7 )]
+
+visibility/visible = false
+visibility/self_opacity = 0.8
+margin/left = 32.0
+margin/top = 64.0
+margin/right = 320.0
+margin/bottom = 416.0
+
+[node name="Console" parent="." instance=ExtResource( 8 )]
+
+visibility/visible = false
+visibility/self_opacity = 0.8
+margin/left = 544.0
+margin/right = 992.0
+
+[node name="Quit" type="ConfirmationDialog" parent="."]
+
+visibility/visible = false
+visibility/self_opacity = 0.8
+focus/ignore_mouse = false
+focus/stop_mouse = true
+size_flags/horizontal = 2
+size_flags/vertical = 2
+margin/left = 416.0
+margin/top = 320.0
+margin/right = 604.0
+margin/bottom = 378.0
+popup/exclusive = false
+window/title = "Go to sleep.."
+dialog/text = "Are you sure you want to quit\?"
+dialog/hide_on_ok = true
+
+[node name="Tasks" type="VBoxContainer" parent="."]
+
+anchor/left = 1
+anchor/top = 1
+anchor/right = 1
+anchor/bottom = 1
+focus/ignore_mouse = false
+focus/stop_mouse = false
+size_flags/horizontal = 2
+size_flags/vertical = 2
+margin/left = 480.0
+margin/top = 216.0
+margin/right = 32.0
+margin/bottom = 24.0
+custom_constants/separation = -3
+alignment = 0
+script/script = ExtResource( 9 )
+
+[node name="box" type="PanelContainer" parent="Tasks"]
+
+visibility/self_opacity = 0.5
+focus/ignore_mouse = false
+focus/stop_mouse = true
+size_flags/horizontal = 3
+size_flags/vertical = 3
+margin/left = 0.0
+margin/top = 0.0
+margin/right = 448.0
+margin/bottom = 171.0
+
+[node name="MessageBox" type="RichTextLabel" parent="Tasks/box"]
+
+visibility/light_mask = 1024
+focus/ignore_mouse = false
+focus/stop_mouse = true
+size_flags/horizontal = 3
+size_flags/vertical = 3
+margin/left = 7.0
+margin/top = 7.0
+margin/right = 441.0
+margin/bottom = 164.0
+bbcode/enabled = true
+bbcode/bbcode = ""
+visible_characters = -1
+script/script = ExtResource( 10 )
+
+[node name="TaskManager" type="ProgressBar" parent="Tasks"]
+
+rect/min_size = Vector2( 0, 24 )
+focus/ignore_mouse = false
+focus/stop_mouse = true
+size_flags/horizontal = 2
+size_flags/vertical = 0
+margin/left = 0.0
+margin/top = 168.0
+margin/right = 448.0
+margin/bottom = 192.0
+range/min = 0.0
+range/max = 1.0
+range/step = 1.0
+range/page = 0.0
+range/value = 1.0
+range/exp_edit = false
+range/rounded = false
+percent/visible = false
+script/script = ExtResource( 11 )
+
+[node name="Label" type="Label" parent="Tasks/TaskManager"]
+
+anchor/right = 1
+anchor/bottom = 1
+focus/ignore_mouse = true
+focus/stop_mouse = true
+size_flags/horizontal = 3
+size_flags/vertical = 3
+margin/left = 0.0
+margin/top = 0.0
+margin/right = 0.0
+margin/bottom = 0.0
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 1
+custom_constants/shadow_offset_y = 1
+custom_constants/shadow_as_outline = 1
+text = "Assembling a useful widget"
+align = 1
+valign = 1
+percent_visible = 1.0
+lines_skipped = 0
+max_lines_visible = -1
+
+[node name="Queue" type="Control" parent="Tasks/TaskManager"]
+
+focus/ignore_mouse = false
+focus/stop_mouse = true
+size_flags/horizontal = 2
+size_flags/vertical = 2
+margin/left = 0.0
+margin/top = 21.0
+margin/right = 448.0
+margin/bottom = 21.0
+
+[node name="Observe" type="VBoxContainer" parent="."]
+
+editor/display_folded = true
+anchor/top = 1
+anchor/bottom = 1
+focus/ignore_mouse = false
+focus/stop_mouse = false
+size_flags/horizontal = 2
+size_flags/vertical = 2
+margin/left = 32.0
+margin/top = 216.0
+margin/right = 480.0
+margin/bottom = 24.0
+custom_constants/separation = -3
+alignment = 0
+script/script = ExtResource( 12 )
+
+[node name="box" type="PanelContainer" parent="Observe"]
+
+visibility/self_opacity = 0.5
+focus/ignore_mouse = false
+focus/stop_mouse = true
+size_flags/horizontal = 3
+size_flags/vertical = 3
+margin/left = 0.0
+margin/top = 0.0
+margin/right = 448.0
+margin/bottom = 195.0
+
+[node name="MessageBox" type="RichTextLabel" parent="Observe/box"]
+
+visibility/light_mask = 1024
+focus/ignore_mouse = false
+focus/stop_mouse = true
+size_flags/horizontal = 3
+size_flags/vertical = 3
+margin/left = 7.0
+margin/top = 7.0
+margin/right = 441.0
+margin/bottom = 188.0
+bbcode/enabled = true
+bbcode/bbcode = ""
+visible_characters = -1
+script/script = ExtResource( 10 )
+
+[node name="Queue" type="Control" parent="Observe"]
+
+focus/ignore_mouse = false
+focus/stop_mouse = true
+size_flags/horizontal = 2
+size_flags/vertical = 2
+margin/left = 0.0
+margin/top = 192.0
+margin/right = 448.0
+margin/bottom = 192.0
+
+[node name="Clock" parent="." instance=ExtResource( 13 )]
+
+editor/display_folded = true
+margin/left = 704.0
+margin/top = 32.0
+margin/right = 744.0
+margin/bottom = 72.0
+
+[node name="Label" type="Label" parent="Clock"]
+
+focus/ignore_mouse = true
+focus/stop_mouse = true
+size_flags/horizontal = 2
+size_flags/vertical = 0
+margin/left = 0.0
+margin/top = 0.0
+margin/right = 40.0
+margin/bottom = 14.0
+percent_visible = 1.0
+lines_skipped = 0
+max_lines_visible = -1
+
+[node name="You" type="PanelContainer" parent="."]
+
+visibility/visible = false
+visibility/self_opacity = 0.25
+visibility/blend_mode = 2
+anchor/right = 1
+rect/min_size = Vector2( 288, 0 )
+focus/ignore_mouse = false
+focus/stop_mouse = true
+size_flags/horizontal = 2
+size_flags/vertical = 2
+margin/left = 32.0
+margin/top = 32.0
+margin/right = 704.0
+margin/bottom = 74.0
+
+[node name="Skills" parent="You" instance=ExtResource( 14 )]
+
+[node name="Bars" type="VBoxContainer" parent="You"]
+
+focus/ignore_mouse = false
+focus/stop_mouse = false
+size_flags/horizontal = 2
+size_flags/vertical = 2
+margin/left = 7.0
+margin/top = 7.0
+margin/right = 281.0
+margin/bottom = 35.0
+alignment = 0
+
+[node name="Stamina" type="ProgressBar" parent="You/Bars"]
+
+visibility/light_mask = 0
+rect/min_size = Vector2( 0, 16 )
+hint/tooltip = "Stamina"
+focus/ignore_mouse = false
+focus/stop_mouse = true
+size_flags/horizontal = 2
+size_flags/vertical = 0
+margin/left = 0.0
+margin/top = 0.0
+margin/right = 274.0
+margin/bottom = 16.0
+custom_styles/fg = SubResource( 3 )
+custom_styles/bg = ExtResource( 15 )
+range/min = 0.0
+range/max = 100.0
+range/step = 1.0
+range/page = 0.0
+range/value = 50.0
+range/exp_edit = false
+range/rounded = false
+percent/visible = false
+
+[node name="needs" type="HBoxContainer" parent="You/Bars"]
+
+focus/ignore_mouse = false
+focus/stop_mouse = false
+size_flags/horizontal = 2
+size_flags/vertical = 2
+margin/left = 0.0
+margin/top = 20.0
+margin/right = 274.0
+margin/bottom = 28.0
+alignment = 0
+
+[node name="Thirst" type="ProgressBar" parent="You/Bars/needs"]
+
+visibility/light_mask = 0
+rect/min_size = Vector2( 0, 8 )
+hint/tooltip = "Water need met"
+focus/ignore_mouse = false
+focus/stop_mouse = true
+size_flags/horizontal = 3
+size_flags/vertical = 0
+margin/left = 0.0
+margin/top = 0.0
+margin/right = 135.0
+margin/bottom = 8.0
+custom_styles/fg = SubResource( 4 )
+custom_styles/bg = ExtResource( 15 )
+range/min = 0.0
+range/max = 100.0
+range/step = 1.0
+range/page = 0.0
+range/value = 50.0
+range/exp_edit = false
+range/rounded = false
+percent/visible = false
+
+[node name="Hunger" type="ProgressBar" parent="You/Bars/needs"]
+
+visibility/light_mask = 0
+rect/min_size = Vector2( 0, 8 )
+hint/tooltip = "Food need met"
+focus/ignore_mouse = false
+focus/stop_mouse = true
+size_flags/horizontal = 3
+size_flags/vertical = 0
+margin/left = 139.0
+margin/top = 0.0
+margin/right = 274.0
+margin/bottom = 8.0
+custom_styles/fg = SubResource( 5 )
+custom_styles/bg = ExtResource( 15 )
+range/min = 0.0
+range/max = 100.0
+range/step = 1.0
+range/page = 0.0
+range/value = 50.0
+range/exp_edit = false
+range/rounded = false
+percent/visible = false
+
+[node name="AutosaveTimer" type="Timer" parent="."]
+
+process_mode = 1
+wait_time = 600.0
+one_shot = false
+autostart = true
+
+[node name="Top" type="HBoxContainer" parent="."]
+
+editor/display_folded = true
+anchor/left = 3
+anchor/right = 3
+focus/ignore_mouse = false
+focus/stop_mouse = false
+size_flags/horizontal = 3
+size_flags/vertical = 2
+margin/left = 512.0
+margin/top = 0.0
+margin/right = -512.0
+margin/bottom = 20.0
+alignment = 1
+
+[node name="Skills" type="Button" parent="Top"]
+
+focus/ignore_mouse = false
+focus/stop_mouse = true
+size_flags/horizontal = 2
+size_flags/vertical = 2
+margin/left = 366.0
+margin/top = 0.0
+margin/right = 404.0
+margin/bottom = 20.0
+toggle_mode = true
+enabled_focus_mode = 2
+shortcut = null
+text = "Skills"
+flat = false
+
+[node name="Inventory" type="Button" parent="Top"]
+
+focus/ignore_mouse = false
+focus/stop_mouse = true
+size_flags/horizontal = 2
+size_flags/vertical = 2
+margin/left = 408.0
+margin/top = 0.0
+margin/right = 468.0
+margin/bottom = 20.0
+toggle_mode = true
+enabled_focus_mode = 2
+shortcut = null
+text = "Inventory"
+flat = false
+
+[node name="Options" type="Button" parent="Top"]
+
+focus/ignore_mouse = false
+focus/stop_mouse = true
+size_flags/horizontal = 2
+size_flags/vertical = 2
+margin/left = 472.0
+margin/top = 0.0
+margin/right = 524.0
+margin/bottom = 20.0
+toggle_mode = true
+enabled_focus_mode = 2
+shortcut = null
+text = "Options"
+flat = false
+
+[node name="Stats" type="Button" parent="Top"]
+
+focus/ignore_mouse = false
+focus/stop_mouse = true
+size_flags/horizontal = 2
+size_flags/vertical = 2
+margin/left = 528.0
+margin/top = 0.0
+margin/right = 564.0
+margin/bottom = 20.0
+toggle_mode = true
+enabled_focus_mode = 2
+shortcut = null
+text = "Stats"
+flat = false
+
+[node name="Console" type="Button" parent="Top"]
+
+focus/ignore_mouse = false
+focus/stop_mouse = true
+size_flags/horizontal = 2
+size_flags/vertical = 2
+margin/left = 568.0
+margin/top = 0.0
+margin/right = 619.0
+margin/bottom = 20.0
+toggle_mode = true
+enabled_focus_mode = 2
+shortcut = null
+text = "Console"
+flat = false
+
+[node name="Quit" type="Button" parent="Top"]
+
+focus/ignore_mouse = false
+focus/stop_mouse = true
+size_flags/horizontal = 2
+size_flags/vertical = 2
+margin/left = 623.0
+margin/top = 0.0
+margin/right = 657.0
+margin/bottom = 20.0
+toggle_mode = true
+enabled_focus_mode = 2
+shortcut = null
+text = "Quit"
+flat = false
+
+[node name="Items" type="Control" parent="."]
+
+focus/ignore_mouse = false
+focus/stop_mouse = true
+size_flags/horizontal = 2
+size_flags/vertical = 2
+margin/left = 0.0
+margin/top = 0.0
+margin/right = 40.0
+margin/bottom = 40.0
+script/script = ExtResource( 16 )
+
+[node name="GuiModulate" type="CanvasModulate" parent="."]
+
+editor/display_folded = true
+color = Color( 0.96875, 0.925232, 0.726563, 1 )
+
+[node name="GuiLight" type="Light2D" parent="GuiModulate"]
+
+transform/pos = Vector2( 512, 384 )
+enabled = true
+editor_only = false
+texture = ExtResource( 17 )
+offset = Vector2( 0, 0 )
+scale = 20.0
+color = Color( 0.494141, 0.71875, 0.555557, 1 )
+energy = 1.0
+mode = 0
+range/height = 0.0
+range/z_min = -1024
+range/z_max = 1024
+range/layer_min = 0
+range/layer_max = 0
+range/item_mask = 1
+shadow/enabled = false
+shadow/color = Color( 0, 0, 0, 0 )
+shadow/buffer_size = 2048
+shadow/esm_multiplier = 80.0
+shadow/item_mask = 1
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+layer = -1
+offset = Vector2( 0, 0 )
+rotation = 0.0
+scale = Vector2( 1, 1 )
+
+[node name="BG" type="Control" parent="CanvasLayer"]
+
+anchor/right = 1
+anchor/bottom = 1
+focus/ignore_mouse = false
+focus/stop_mouse = true
+size_flags/horizontal = 2
+size_flags/vertical = 2
+margin/left = 0.0
+margin/top = 0.0
+margin/right = 0.0
+margin/bottom = 0.0
+
+[node name="Viewport" type="Viewport" parent="CanvasLayer/BG"]
+
+rect = Rect2( 0, 0, 1024, 600 )
+own_world = false
+world = null
+transparent_bg = false
+render_target/enabled = true
+render_target/v_flip = false
+render_target/clear_on_new_frame = false
+render_target/filter = false
+render_target/gen_mipmaps = false
+render_target/update_mode = 2
+audio_listener/enable_2d = false
+audio_listener/enable_3d = false
+physics/object_picking = false
+gui/disable_input = false
+
+[node name="Background" parent="CanvasLayer/BG/Viewport" instance=ExtResource( 18 )]
+
+[node name="ViewportTexture" type="TextureFrame" parent="CanvasLayer/BG"]
+
+visibility/light_mask = 0
+anchor/right = 1
+anchor/bottom = 1
+focus/ignore_mouse = true
+focus/stop_mouse = true
+size_flags/horizontal = 2
+size_flags/vertical = 2
+margin/left = 0.0
+margin/top = 0.0
+margin/right = 0.0
+margin/bottom = 0.0
+expand = true
+stretch_mode = 0
+script/script = SubResource( 6 )
+
+[connection signal="confirmed" from="Quit" to="." method="_on_Quit_confirmed"]
+
+[connection signal="timeout" from="AutosaveTimer" to="." method="_on_Autosave_timeout"]
+
+[connection signal="toggled" from="Top/Skills" to="." method="_on_Skills_toggled"]
+
+[connection signal="toggled" from="Top/Inventory" to="." method="_on_Inventory_toggled"]
+
+[connection signal="toggled" from="Top/Options" to="." method="_on_Options_toggled"]
+
+[connection signal="toggled" from="Top/Stats" to="." method="_on_Stats_toggled"]
+
+[connection signal="toggled" from="Top/Console" to="." method="_on_Console_toggled"]
+
+[connection signal="toggled" from="Top/Quit" to="." method="_on_Quit_toggled"]
+
+

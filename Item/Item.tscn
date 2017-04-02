@@ -1,0 +1,15 @@
+[gd_scene load_steps=2 format=1]
+
+[ext_resource path="res://Item/Item.gd" type="Script" id=1]
+
+[node name="Item" type="Node"]
+
+script/script = ExtResource( 1 )
+name = "NoName"
+description = "This object defies description."
+quality = 1.0
+weight = 1.0
+immovable = false
+size = 0
+
+

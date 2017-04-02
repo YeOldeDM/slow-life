@@ -1,0 +1,25 @@
+[gd_scene load_steps=2 format=1]
+
+[ext_resource path="res://WorldItem/WorldItem.gd" type="Script" id=1]
+
+[node name="WorldItem" type="MenuButton"]
+
+rect/min_size = Vector2( 90, 32 )
+focus/ignore_mouse = false
+focus/stop_mouse = true
+size_flags/horizontal = 2
+size_flags/vertical = 2
+margin/left = 0.0
+margin/top = 0.0
+margin/right = 90.0
+margin/bottom = 32.0
+toggle_mode = false
+click_on_press = true
+enabled_focus_mode = 0
+shortcut = null
+text = "Grass"
+flat = false
+items = [  ]
+script/script = ExtResource( 1 )
+
+
