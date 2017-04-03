@@ -156,6 +156,8 @@ func _ready():
 #	for node in get_node('World/CircularContainer').get_children():
 #		if node.has_method('start'):
 #			node.start()
+	
+
 
 
 
