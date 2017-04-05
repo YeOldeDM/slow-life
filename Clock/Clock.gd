@@ -1,5 +1,14 @@
 extends Control
 
+const DAY_NAMES = [
+	"Wunday",
+	"Twosday",
+	"Windsday",
+	"Thorsday",
+	"Freysday",
+	"Satursday",
+	"Sunsday"
+	]
 
 signal tick()
 

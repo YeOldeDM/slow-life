@@ -1,0 +1,15 @@
+[Item]
+
+name="feet"
+description="Those are your feet."
+
+quality=50.0
+
+weight=0.0
+
+equip_slots = ["feet"]
+
+immovable=true
+indestructible=true
+size=0
+

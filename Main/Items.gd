@@ -13,6 +13,11 @@ func create_item(path):
 	var itm = preload("res://Item/Item.tscn").instance()
 	add_child(itm)
 	
+	# Set Item ref string
+	var ref = path.right(path.rfindn('/')+1)
+	ref = ref.left(ref.rfind('.'))
+	itm._ref = ref
+	
 	# Assemble object/components from config sections
 	for section in data.get_sections():
 		var comp
@@ -43,12 +48,15 @@ func create_item(path):
 
 func _ready():
 	Game.items = self
-	var torso = Game.inventory.add_item(create_item('res://database/bodyparts/torso.cfg'),null,true)
-	var hands = Game.inventory.add_item(create_item('res://database/bodyparts/hands.cfg'),null,true)
-	Game.inventory.add_item(create_item('res://database/bodyparts/legs.cfg'),null,true)
-	Game.inventory.add_item(create_item('res://database/bodyparts/feet.cfg'),null,true)
-	var backpack = create_item('res://database/crafted/backpack.cfg')
-	var rock = create_item('res://database/natural/rock.cfg')
+	Game.inventory.add_item(create_item('res://database/bodyparts/head.tres'),null,true)
+	var torso = Game.inventory.add_item(create_item('res://database/bodyparts/torso.tres'),null,true)
+	var hands = Game.inventory.add_item(create_item('res://database/bodyparts/hands.tres'),null,true)
+	Game.inventory.add_item(create_item('res://database/bodyparts/legs.tres'),null,true)
+	Game.inventory.add_item(create_item('res://database/bodyparts/feet.tres'),null,true)
+	
+	
+	var backpack = create_item('res://database/crafted/backpack.tres')
+	var rock = create_item('res://database/natural/rock.tres')
 	var bp = Game.inventory.add_item(backpack, torso)
 	Game.inventory.default_container = bp
 	Game.inventory.add_item(rock,bp)

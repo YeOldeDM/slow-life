@@ -14,6 +14,11 @@ var treeitem
 func is_base():
 	return get_child_count()==0
 
+func get_parent_skill():
+	var parent = get_parent()
+	if parent extends get_script():
+		return parent
+
 func get_score():
 	# Return my skill if no children exist
 	if get_child_count()==0:

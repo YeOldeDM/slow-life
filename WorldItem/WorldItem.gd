@@ -14,6 +14,9 @@ var tools_needed
 
 var quality = 1.0
 
+
+
+
 func setup(path):
 	var file = ConfigFile.new()
 	var err = file.load(path)
@@ -24,15 +27,15 @@ func setup(path):
 		if key in self:
 			set(key, file.get_value("Item", key))
 	
-	menu.add_item(self.name, Game.main.ACTION_EXAMINE)
+	menu.add_item(self.name, Action.ACTION_EXAMINE)
 	menu.add_separator()
-	menu.add_item("Examine", Game.main.ACTION_EXAMINE)
+	menu.add_item("Examine", Action.ACTION_EXAMINE)
 	
 	for key in self.custom_actions:
 		var idx = self.custom_actions[key]
 		menu.add_item(key, idx)
 	menu.add_separator()
-	menu.add_item("My notebook entry for "+self.name, Game.main.ACTION_LOOKUP)
+	menu.add_item("My notebook entry for "+self.name, Action.ACTION_LOOKUP)
 
 	menu.connect("item_pressed", self, "_on_menu_item_pressed")
 	return OK
@@ -40,13 +43,12 @@ func setup(path):
 
 
 
-func start():
-	var x = setup('res://database/worlditems/trees.cfg')
+
 
 
 
 func _on_menu_item_pressed(idx):
-	Game.main.action(self, idx)
+	Action.Go(self, idx)
 
 
 

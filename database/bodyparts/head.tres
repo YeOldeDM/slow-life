@@ -1,0 +1,16 @@
+[Item]
+
+name="head"
+description="That's your head."
+
+quality=50.0
+
+weight=0.0
+
+equip_slots = ["head"]
+
+immovable=true
+indestructible=true
+
+size=0
+

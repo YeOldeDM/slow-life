@@ -1,0 +1,26 @@
+[Item]
+
+name="clay flask"
+description="A potted flask to provide a portable form of storage for drinkable liquids."
+
+quality=1.0
+
+
+weight=0.6
+
+
+immovable=false
+size=1
+
+
+[Container]
+
+max_weight=4.0
+
+size_limit=0
+
+liquids_only=true
+
+[Equippable]
+
+fits_slot = "back"

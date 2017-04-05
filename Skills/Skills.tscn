@@ -61,13 +61,17 @@ score = 1.0
 
 [node name="Nature" parent="Level" instance=ExtResource( 2 )]
 
-editor/display_folded = true
 ID = "nature"
 score = 1.0
 
 [node name="Athletics" parent="Level/Nature" instance=ExtResource( 2 )]
 
 ID = "athletics"
+score = 1.0
+
+[node name="Hiking" parent="Level/Nature/Athletics" instance=ExtResource( 2 )]
+
+ID = "hiking"
 score = 1.0
 
 [node name="Farming" parent="Level/Nature" instance=ExtResource( 2 )]
@@ -78,6 +82,16 @@ score = 1.0
 [node name="Survival" parent="Level/Nature" instance=ExtResource( 2 )]
 
 ID = "survival"
+score = 1.0
+
+[node name="Foraging" parent="Level/Nature/Survival" instance=ExtResource( 2 )]
+
+ID = "foraging"
+score = 3.4
+
+[node name="Fishing" parent="Level/Nature/Survival" instance=ExtResource( 2 )]
+
+ID = "fishing"
 score = 1.0
 
 [node name="Self" parent="Level" instance=ExtResource( 2 )]

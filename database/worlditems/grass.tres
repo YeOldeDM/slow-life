@@ -1,0 +1,19 @@
+[Item]
+
+name="Grass"
+description="A thick and wild grass grows here."
+
+custom_actions={"forage":21,}
+
+action_result_items={
+	"forage": {
+		"res://database/natural/rock.tres": 1,
+		"res://database/natural/branch.tres": 1,
+		"res://database/natural/berry.tres": 1,
+		},
+	}
+
+
+quality=1.0
+quality_variance=[1.0,15.0]
+

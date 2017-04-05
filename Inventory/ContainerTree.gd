@@ -2,6 +2,9 @@ extends Tree
 
 const COLOR_INACTIVE = Color(1,1,1)
 const COLOR_ACTIVE = Color(0,0.8,0)
+
+var icondir = 'res://assets/graphics/icons/'
+var NO_ICON = preload('res://assets/graphics/icons/MISSING_ICON.png')
 	
 var columns = ['Name', 'QL', 'Dmg', 'Wt']
 
@@ -57,6 +60,20 @@ func add_item(item,parent=null,root_item=false):
 	my.connect('damage_changed', self, 'update_item_text', [itm,2])
 	my.connect('weight_changed', self, 'update_item_text', [itm,3])
 	
+	# set item icon
+	var icon = null
+	var ref = my.get_ref()
+	if ref:
+		# look for and load icon
+		var iconpath = icondir+ref+'.png'
+		var x = File.new().file_exists(iconpath)
+		if x:
+			icon = load(icondir+ref+'.png')
+	# Use fallback icon if none can be loaded
+	if !icon:
+		icon = NO_ICON
+	itm.set_icon(0, icon)
+
 	# set treeitem text
 	itm.set_text(0, my.name)
 	itm.set_text(1, str(my.quality).pad_decimals(2))
@@ -73,6 +90,7 @@ func add_item(item,parent=null,root_item=false):
 	return itm
 
 
+# Update item column property from item signals
 func update_item_text(data, item, col):
 	var text = str(data)
 	if typeof(data) == TYPE_REAL:
@@ -80,26 +98,41 @@ func update_item_text(data, item, col):
 	item.set_text(col, text)
 
 
-
+# Show item options when right-clicked
 func show_actions_menu(pos):
-	var item = get_item_at_pos(pos)
-	item.select(0)
+	var itm = get_item_at_pos(pos)
+	if !itm: return
+	itm.select(0)
+	var item = itm.get_meta('item')
 	var menu = PopupMenu.new()
 	add_child(menu)
 	
-	# menu title
-	menu.add_item(item.get_text(0),-1)
+	# menu Header
+	menu.add_item(itm.get_text(0),-1)
 	menu.add_separator()
 	# ------- #
 	
 	# populate menu(s)
-	var actions = {
-		'Examine': null,
-		'Drop':	['Ground'],
-		'Destroy':	['Really?'],
-		
-		}
-	menu.add_item("Examine", 0)
+	
+	
+	# Create the popup menu
+	
+	# Examine (should be on every item)
+	menu.add_item("Examine", Action.ACTION_EXAMINE)
+	
+	# Drop (unless immovable)
+	if !item.immovable:
+		menu.add_item("Drop", Action.ACTION_DROP)
+	
+	# Destroy (unless indestructible)
+	if !item.indestructible:
+		var destroy = PopupMenu.new()
+		destroy.add_item("Really?", Action.ACTION_DESTROY)
+		menu.add_child(destroy)
+		destroy.connect("item_pressed", self, "_on_item_action_pressed")
+		destroy.set_name("destroy")
+		menu.add_submenu_item("Destroy", "destroy")
+	
 	if Game.DEV_MODE:
 		var bad = PopupMenu.new()
 		bad.add_item("BAD",-1)
@@ -110,9 +143,10 @@ func show_actions_menu(pos):
 		menu.add_submenu_item("Trump", "bad", -1)
 		menu.add_item("Obama", -1)
 	
+	# Menu footer
 	menu.add_separator()
 	# ------- #
-	menu.add_item("My notebook entry for "+item.get_text(0), 88)
+	menu.add_item("My notebook entry for "+itm.get_text(0), 88)
 	
 	# draw menu
 	menu.popup()
@@ -127,22 +161,27 @@ func show_actions_menu(pos):
 func get_drag_data(pos):
 	set_drop_mode_flags(DROP_MODE_INBETWEEN + DROP_MODE_ON_ITEM)
 	var item = get_item_at_pos(pos)
-	var lab = Label.new()
-	lab.set_text(item.get_text(0))
-	set_drag_preview(lab)
-	return item
-	#print(item.get_text(0))
+	if !item.get_meta('item').immovable:
+		var box = Button.new()
+		box.set_flat(true)
+		box.set_button_icon(item.get_icon(0))
+		box.set_text(item.get_text(0))
+		set_drag_preview(box)
+		return item
+		#print(item.get_text(0))
 
 func can_drop_data(pos, data):
-	if data extends TreeItem:
+	if data.has_meta('item'):
 		return true
 	return false
 
 func drop_data(pos,data):
+	# data=dragged item
+	# item=drag target
 	var item = get_item_at_pos(pos)
 	if item != null:
 		prints(item.get_text(0),data.get_text(0))
-		set_drop_mode_flags(DROP_MODE_DISABLED)
+		#set_drop_mode_flags(DROP_MODE_DISABLED)
 
 # On right-clicking an inventory item
 func _on_ContainerTree_item_rmb_selected( pos ):
@@ -159,7 +198,7 @@ func _on_item_action_pressed(idx):
 	printt(get_selected().get_text(0), idx)
 	var item = get_selected().get_meta('item')
 	if item:
-		var err = Game.main.action(item, idx)
+		var err = Action.Go(item, idx)
 
 
 

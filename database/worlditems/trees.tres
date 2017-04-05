@@ -1,0 +1,23 @@
+[Item]
+
+name="Trees"
+description="The handsome trees sway gently in the breeze."
+
+custom_actions={"chop tree":20,"forage":21,}
+
+action_result_items={
+	"harvest": {
+		"res://database/natural/log.tres": 1
+		},
+	"forage": {
+		"res://database/natural/rock.tres": 1,
+		"res://database/natural/branch.tres": 4,
+		"res://database/natural/berry.tres": 2,
+		},
+	}
+
+tools_needed={"chop tree":"chop"}
+
+quality=1.0
+quality_variance=[1.0,15.0]
+

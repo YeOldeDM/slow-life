@@ -6,6 +6,8 @@ signal quality_changed(val)
 signal weight_changed(val)
 signal damage_changed(val)
 
+var _ref
+
 # Params
 export(String, MULTILINE) var name = "NoName" setget _set_name
 export(String, MULTILINE) var description = "This object defies description."
@@ -14,7 +16,9 @@ export(float) var quality = 1.0 setget _set_quality
 export(float) var weight = 1.0 setget _set_weight
 
 export(bool) var liquid = false
+
 export(bool) var immovable = false
+export(bool) var indestructible = false
 
 var damage = 0.0 setget _set_damage
 
@@ -50,6 +54,12 @@ func restore(data):
 
 
 # Public methods
+func get_name():
+	return self.name
+
+func get_ref():
+	return self._ref
+
 func get_total_weight():
 	var total = self.weight
 	if self.container:
