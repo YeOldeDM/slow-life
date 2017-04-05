@@ -37,7 +37,7 @@ func can_fit(item):
 
 func add_item(item):
 	if item.location:
-		item = item.location.remove_item(item)
+		item = item.location.container.remove_item(item)
 	if can_fit(item):
 		self.contents.append(item)
 		item.location = owner

@@ -177,10 +177,18 @@ func can_drop_data(pos, data):
 
 func drop_data(pos,data):
 	# data=dragged item
-	# item=drag target
-	var item = get_item_at_pos(pos)
-	if item != null:
-		prints(item.get_text(0),data.get_text(0))
+	# itm=drag target TreeItem
+	# item=drag target Item
+	var itm = get_item_at_pos(pos)
+	if itm != null:
+		Game.console.message("Dragging "+data.get_text(0)+" to "+itm.get_text(0))
+		var item = itm.get_meta('item')
+		if item.container:
+			data.get_parent().remove_child(data)
+			add_item(data.get_meta('item'),itm)
+			Game.task_board.message("You put the "+data.get_text(0)+ " in the " +itm.get_text(0)+ ".")
+		else:
+			Game.task_board.message("The "+data.get_text(0)+" wont fit in the "+itm.get_text(0)+".")
 		#set_drop_mode_flags(DROP_MODE_DISABLED)
 
 # On right-clicking an inventory item
