@@ -26,11 +26,16 @@ func restore(data):
 
 
 
-func equip():
+func equip(to, slot):
+	self.worn_on = [to, slot]
+	if !slot in to.equipped:
+		to.equipped[slot] = owner
 	emit_signal('put_on')
 
 
 func dequip():
+	self.worn_on[0].equipped.erase(self.worn_on[1])
+	self.worn_on = null
 	emit_signal('taken_off')
 
 

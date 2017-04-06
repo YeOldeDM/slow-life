@@ -2,12 +2,13 @@ extends Node
 
 
 # Common actions
-const ACTION_EXAMINE = 0	# Examine an Item
-const ACTION_DESTROY = 1	# Destroy (delete) an Item
-const ACTION_DROP = 2		# Move an item into the Ground container
-const ACTION_NAME = 3		# Give a name to an object
+const ACTION_EXAMINE = 	0	# Examine an Item
+const ACTION_DESTROY = 	1	# Destroy (delete) an Item
+const ACTION_DROP = 	2	# Move an item into the Ground container
+const ACTION_NAME = 	3	# Give a name to an object
 const ACTION_ACTIVATE = 4	# Activate an object
-const ACTION_OPEN = 5		# Open a container object
+const ACTION_OPEN = 	5	# Open a container object
+const ACTION_EQUIP = 	6	# Equip an item to another item
 
 # Uniquer actions
 const ACTION_WORLDITEM_HARVEST = 20	# Harvest from a WorldItem

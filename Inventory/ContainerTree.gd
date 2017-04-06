@@ -10,25 +10,20 @@ var columns = ['Name', 'QL', 'Dmg', 'Wt']
 
 var root
 
+var body = {
+	'head':		null,
+	'torso':	null,
+	'hands':	null,
+	'legs':		null,
+	'feet':		null
+	}
+
 var default_container
 var ground
 
 var active_item setget _set_active_item
 
-func _ready():
-	set_hide_root(true)
-	set_allow_rmb_select(true)
-	set_columns(columns.size())
-	set_column_titles_visible(true)
-	set_column_expand(0, true)
-	for i in range(columns.size()):
-		if i !=0:
-			set_column_expand(i,false)
-			set_column_min_width(i, 42)
-		set_column_title(i, columns[i])
 
-	# Create Container root
-	root = create_item()
 
 
 func is_inventory():
@@ -47,7 +42,8 @@ func set_active_item(itm):
 		itm.set_custom_color(i,COLOR_ACTIVE)
 	self.active_item = itm
 
-func add_item(item,parent=null,root_item=false):
+
+func add_item(item,parent=null,root_item=false,equip=false):
 	if root_item: parent = root
 	elif !parent: 
 		if default_container != null:
@@ -92,16 +88,42 @@ func add_item(item,parent=null,root_item=false):
 	
 
 	# Add Item to parent Item's container
-	if parent != root:
-		var pitem = parent.get_meta('item')
-		if pitem.container:
-			pitem.container.add_item(my)
+	if !equip:
+		if parent != root:
+			var pitem = parent.get_meta('item')
+			if pitem.container:
+				pitem.container.add_item(my)
 	
 	if item.container:
 		for i in item.container.contents:
 			add_item(i,itm)
 	
 	return itm
+
+
+# Move data into itm container
+func move_item(data, itm):
+	if itm != null:
+		Game.console.message("Dragging "+data.get_text(0)+" to "+itm.get_text(0))
+		var item = itm.get_meta('item')
+		if item.container:
+			if item.container.can_fit(data.get_meta('item')):
+				var moved_itm = add_item(data.get_meta('item'),itm)
+				if self.active_item == data:
+					set_active_item(moved_itm)
+				data.get_parent().remove_child(data)
+				Game.task_board.message("You put the "+data.get_text(0)+ " in the " +itm.get_text(0)+ ".")
+		else:
+			Game.task_board.message("The "+data.get_text(0)+" wont fit in the "+itm.get_text(0)+".")
+		#set_drop_mode_flags(DROP_MODE_DISABLED)
+
+
+func equip_item(itm, wearer):
+	var item = itm.get_meta('item').location.container.remove_item(itm.get_meta('item'))
+	item.equippable.equip(wearer.get_meta('item'))
+	
+	itm.get_parent.remove_child(itm)
+	add_item(item,wearer,false,true)
 
 
 # Update item column property from item signals
@@ -155,8 +177,31 @@ func show_actions_menu(pos):
 	if !item == active_item && item.get_parent() != self.ground:
 		menu.add_item("Activate", Action.ACTION_ACTIVATE)
 	
-
-	
+	# Equip equippable items
+	if item.equippable:
+		var parts = []
+		for slot in item.equippable.fits_slot:
+			for key in self.body:
+				if item.equippable.can_fit(self.body[key].get_meta('item')):
+					if !self.body[key] in parts:
+						parts.append(self.body[key])
+		if !parts.empty():
+			var partsmenu = PopupMenu.new()
+			menu.add_child(partsmenu)
+			partsmenu.set_name('partsmenu')
+			
+			for part in parts:
+				part = part.get_meta('item')
+				var slotsmenu = PopupMenu.new()
+				partsmenu.add_child(slotsmenu)
+				slotsmenu.set_name('slotsmenu')
+				slotsmenu.connect("item_pressed", self, "_on_item_action_pressed", [slotsmenu])
+				for slot in part.equip_slots:
+					if slot in item.equippable.fits_slot:
+						slotsmenu.add_item(slot, Action.ACTION_EQUIP)
+				partsmenu.add_submenu_item(part.name,'slotsmenu')
+			menu.add_submenu_item("Equip", 'partsmenu')
+		
 	# Menu footer
 	menu.add_separator()
 	# ------- #
@@ -171,6 +216,11 @@ func show_actions_menu(pos):
 	
 	menu.connect("item_pressed", self, "_on_item_action_pressed")
 
+
+
+
+
+# DRAG-N-DROP METHODS
 
 func get_drag_data(pos):
 	set_drop_mode_flags(DROP_MODE_INBETWEEN + DROP_MODE_ON_ITEM)
@@ -196,21 +246,13 @@ func drop_data(pos,data):
 	var itm = get_item_at_pos(pos)
 	move_item(data, itm)
 
-# Move data into itm container
-func move_item(data, itm):
-	if itm != null:
-		Game.console.message("Dragging "+data.get_text(0)+" to "+itm.get_text(0))
-		var item = itm.get_meta('item')
-		if item.container:
-			if item.container.can_fit(data.get_meta('item')):
-				var moved_itm = add_item(data.get_meta('item'),itm)
-				if self.active_item == data:
-					set_active_item(moved_itm)
-				data.get_parent().remove_child(data)
-				Game.task_board.message("You put the "+data.get_text(0)+ " in the " +itm.get_text(0)+ ".")
-		else:
-			Game.task_board.message("The "+data.get_text(0)+" wont fit in the "+itm.get_text(0)+".")
-		#set_drop_mode_flags(DROP_MODE_DISABLED)
+
+
+
+
+
+
+
 
 # On right-clicking an inventory item
 func _on_ContainerTree_item_rmb_selected( pos ):
@@ -226,8 +268,9 @@ func _on_ContainerTree_item_activated():
 		if itm && itm != self.ground:
 			set_active_item(itm)
 
-
-func _on_item_action_pressed(idx):
+# On option clicked from item rmb menu
+# idx should correspond to Action.ACTION_*
+func _on_item_action_pressed(idx, param=null):
 	printt(get_selected().get_text(0), idx)
 	var item = get_selected().get_meta('item')
 	if item:
@@ -237,9 +280,36 @@ func _on_item_action_pressed(idx):
 		elif idx == Action.ACTION_DROP:
 			move_item(get_selected(), self.ground)
 			return
+		
+		# Equip - WTF to do...
+		elif idx == Action.ACTION_EQUIP:
+			var slot = param
+		
 		var err = Action.Go(item, idx)
 
 
+
+
+
+
+func _ready():
+	set_hide_root(true)
+	set_allow_rmb_select(true)
+	set_columns(columns.size())
+	set_column_titles_visible(true)
+	set_column_expand(0, true)
+	for i in range(columns.size()):
+		if i !=0:
+			set_column_expand(i,false)
+			set_column_min_width(i, 42)
+		set_column_title(i, columns[i])
+
+	# Create Container root
+	root = create_item()
+
+
+
+# SETTERS
 
 func _set_active_item(what):
 	var label = get_node('../Active/box/Item')

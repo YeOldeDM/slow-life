@@ -48,13 +48,21 @@ func create_item(path):
 
 func _ready():
 	Game.items = self
-	Game.inventory.add_item(create_item('res://database/bodyparts/head.tres'),null,true)
+	
+	var head = Game.inventory.add_item(create_item('res://database/bodyparts/head.tres'),null,true)
 	var torso = Game.inventory.add_item(create_item('res://database/bodyparts/torso.tres'),null,true)
 	var hands = Game.inventory.add_item(create_item('res://database/bodyparts/hands.tres'),null,true)
-	Game.inventory.add_item(create_item('res://database/bodyparts/legs.tres'),null,true)
-	Game.inventory.add_item(create_item('res://database/bodyparts/feet.tres'),null,true)
+	var legs = Game.inventory.add_item(create_item('res://database/bodyparts/legs.tres'),null,true)
+	var feet = Game.inventory.add_item(create_item('res://database/bodyparts/feet.tres'),null,true)
 	var ground = Game.inventory.add_item(create_item('res://database/bodyparts/ground.tres'),null,true)
 	Game.inventory.ground = ground
+	Game.inventory.body = {
+		'head':		head,
+		'torso':	torso,
+		'hands':	hands,
+		'legs':		legs,
+		'feet':		feet
+		}
 	
 	var backpack = create_item('res://database/crafted/backpack.tres')
 	var rock = create_item('res://database/natural/rock.tres')
