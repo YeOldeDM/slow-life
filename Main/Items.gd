@@ -53,7 +53,8 @@ func _ready():
 	var hands = Game.inventory.add_item(create_item('res://database/bodyparts/hands.tres'),null,true)
 	Game.inventory.add_item(create_item('res://database/bodyparts/legs.tres'),null,true)
 	Game.inventory.add_item(create_item('res://database/bodyparts/feet.tres'),null,true)
-	
+	var ground = Game.inventory.add_item(create_item('res://database/bodyparts/ground.tres'),null,true)
+	Game.inventory.ground = ground
 	
 	var backpack = create_item('res://database/crafted/backpack.tres')
 	var rock = create_item('res://database/natural/rock.tres')

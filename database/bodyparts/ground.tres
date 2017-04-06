@@ -1,0 +1,18 @@
+[Item]
+
+name="ground"
+description="The ground beneath your feet."
+
+quality=100.0
+
+weight=0.0
+
+immovable=true
+indestructible=true
+size=4
+
+[Container]
+
+max_weight = -1
+max_items  = -1
+size_limit = 4

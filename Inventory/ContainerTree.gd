@@ -11,11 +11,11 @@ var columns = ['Name', 'QL', 'Dmg', 'Wt']
 var root
 
 var default_container
+var ground
 
 var active_item setget _set_active_item
 
 func _ready():
-	Game.inventory = self
 	set_hide_root(true)
 	set_allow_rmb_select(true)
 	set_columns(columns.size())
@@ -31,10 +31,16 @@ func _ready():
 	root = create_item()
 
 
+func is_inventory():
+	return get_node('../../') extends preload('res://Inventory/Inventory.gd')
+
 func get_active_item():
 	return self.active_item.get_meta('item')
 
 func set_active_item(itm):
+	if !is_inventory():
+		Game.task_board.message("That needs to be in your inventory before you can activate it.")
+		return
 	for i in range(4):
 		if active_item:
 			active_item.set_custom_color(i,COLOR_INACTIVE)
@@ -55,10 +61,14 @@ func add_item(item,parent=null,root_item=false):
 	
 	var my = item
 	# connect item signals
-	my.connect('name_changed', self, 'update_item_text', [itm,0])
-	my.connect('quality_changed', self, 'update_item_text', [itm,1])
-	my.connect('damage_changed', self, 'update_item_text', [itm,2])
-	my.connect('weight_changed', self, 'update_item_text', [itm,3])
+	if !my.is_connected('name_changed', self, 'update_item_text'):
+		my.connect('name_changed', self, 'update_item_text', [itm,0])
+	if !my.is_connected('quality_changed', self, 'update_item_text'):
+		my.connect('quality_changed', self, 'update_item_text', [itm,1])
+	if !my.is_connected('damage_changed', self, 'update_item_text'):
+		my.connect('damage_changed', self, 'update_item_text', [itm,2])
+	if !my.is_connected('weight_changed', self, 'update_item_text'):
+		my.connect('weight_changed', self, 'update_item_text', [itm,3])
 	
 	# set item icon
 	var icon = null
@@ -86,6 +96,10 @@ func add_item(item,parent=null,root_item=false):
 		var pitem = parent.get_meta('item')
 		if pitem.container:
 			pitem.container.add_item(my)
+	
+	if item.container:
+		for i in item.container.contents:
+			add_item(i,itm)
 	
 	return itm
 
@@ -120,8 +134,8 @@ func show_actions_menu(pos):
 	# Examine (should be on every item)
 	menu.add_item("Examine", Action.ACTION_EXAMINE)
 	
-	# Drop (unless immovable)
-	if !item.immovable:
+	# Drop (unless immovable and not already dropped)
+	if !item.immovable && itm.get_parent() != self.ground:
 		menu.add_item("Drop", Action.ACTION_DROP)
 	
 	# Destroy (unless indestructible)
@@ -133,15 +147,15 @@ func show_actions_menu(pos):
 		destroy.set_name("destroy")
 		menu.add_submenu_item("Destroy", "destroy")
 	
-	if Game.DEV_MODE:
-		var bad = PopupMenu.new()
-		bad.add_item("BAD",-1)
-		bad.add_item("WRONG",-1)
-		bad.add_item("FAKENEWS",-1)
-		menu.add_child(bad)
-		bad.set_name('bad')
-		menu.add_submenu_item("Trump", "bad", -1)
-		menu.add_item("Obama", -1)
+	# Open container item
+#	if item.container:
+#		menu.add_item("Open", Action.ACTION_OPEN)
+	
+	# Activate selected item
+	if !item == active_item && item.get_parent() != self.ground:
+		menu.add_item("Activate", Action.ACTION_ACTIVATE)
+	
+
 	
 	# Menu footer
 	menu.add_separator()
@@ -180,13 +194,20 @@ func drop_data(pos,data):
 	# itm=drag target TreeItem
 	# item=drag target Item
 	var itm = get_item_at_pos(pos)
+	move_item(data, itm)
+
+# Move data into itm container
+func move_item(data, itm):
 	if itm != null:
 		Game.console.message("Dragging "+data.get_text(0)+" to "+itm.get_text(0))
 		var item = itm.get_meta('item')
 		if item.container:
-			data.get_parent().remove_child(data)
-			add_item(data.get_meta('item'),itm)
-			Game.task_board.message("You put the "+data.get_text(0)+ " in the " +itm.get_text(0)+ ".")
+			if item.container.can_fit(data.get_meta('item')):
+				var moved_itm = add_item(data.get_meta('item'),itm)
+				if self.active_item == data:
+					set_active_item(moved_itm)
+				data.get_parent().remove_child(data)
+				Game.task_board.message("You put the "+data.get_text(0)+ " in the " +itm.get_text(0)+ ".")
 		else:
 			Game.task_board.message("The "+data.get_text(0)+" wont fit in the "+itm.get_text(0)+".")
 		#set_drop_mode_flags(DROP_MODE_DISABLED)
@@ -199,13 +220,23 @@ func _on_ContainerTree_item_rmb_selected( pos ):
 # On double-clicking an inventory item
 func _on_ContainerTree_item_activated():
 	var itm = get_selected()
-	set_active_item(itm)
+	if itm.get_parent() == self.ground:
+		Game.task_board.message("That must be in your inventory before you can activate it!")
+	else:
+		if itm && itm != self.ground:
+			set_active_item(itm)
 
 
 func _on_item_action_pressed(idx):
 	printt(get_selected().get_text(0), idx)
 	var item = get_selected().get_meta('item')
 	if item:
+		if idx == Action.ACTION_ACTIVATE:
+			set_active_item(get_selected())
+			return
+		elif idx == Action.ACTION_DROP:
+			move_item(get_selected(), self.ground)
+			return
 		var err = Action.Go(item, idx)
 
 

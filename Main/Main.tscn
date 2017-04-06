@@ -34,7 +34,7 @@ Button/styles/focus = null
 Button/styles/normal = null
 Button/styles/pressed = null
 
-[sub_resource type="StyleBoxFlat" id=7]
+[sub_resource type="StyleBoxFlat" id=3]
 
 content_margin/left = -1.0
 content_margin/right = -1.0
@@ -47,7 +47,7 @@ border_size = 0
 border_blend = true
 draw_bg = true
 
-[sub_resource type="StyleBoxFlat" id=8]
+[sub_resource type="StyleBoxFlat" id=4]
 
 content_margin/left = 0.0
 content_margin/right = 0.0
@@ -60,7 +60,7 @@ border_size = 1
 border_blend = true
 draw_bg = true
 
-[sub_resource type="StyleBoxFlat" id=3]
+[sub_resource type="StyleBoxFlat" id=5]
 
 content_margin/left = -1.0
 content_margin/right = -1.0
@@ -73,7 +73,7 @@ border_size = 0
 border_blend = true
 draw_bg = true
 
-[sub_resource type="StyleBoxFlat" id=4]
+[sub_resource type="StyleBoxFlat" id=6]
 
 content_margin/left = -1.0
 content_margin/right = -1.0
@@ -86,7 +86,7 @@ border_size = 0
 border_blend = true
 draw_bg = true
 
-[sub_resource type="StyleBoxFlat" id=5]
+[sub_resource type="StyleBoxFlat" id=7]
 
 content_margin/left = -1.0
 content_margin/right = -1.0
@@ -99,7 +99,7 @@ border_size = 0
 border_blend = true
 draw_bg = true
 
-[sub_resource type="GDScript" id=6]
+[sub_resource type="GDScript" id=8]
 
 script/source = "extends TextureFrame\n\nonready var view = get_node(\'../Viewport\')\n\nvar texture = null setget _set_texture\n\nfunc _ready():\n\tset_fixed_process(true)\n\nfunc _fixed_process(delta):\n\tvar tex = view.get_render_target_texture()\n\ttex.set_flags(0)\n\tself.texture = tex\n\nfunc _set_texture(what):\n\ttexture = what\n\tif texture != null:\n\t\tcall_deferred(\'set_texture\',texture)"
 
@@ -268,8 +268,8 @@ margin/left = 0.0
 margin/top = 168.0
 margin/right = 448.0
 margin/bottom = 192.0
-custom_styles/fg = SubResource( 7 )
-custom_styles/bg = SubResource( 8 )
+custom_styles/fg = SubResource( 3 )
+custom_styles/bg = SubResource( 4 )
 range/min = 0.0
 range/max = 1.0
 range/step = 1.0
@@ -439,7 +439,7 @@ margin/left = 0.0
 margin/top = 0.0
 margin/right = 274.0
 margin/bottom = 16.0
-custom_styles/fg = SubResource( 3 )
+custom_styles/fg = SubResource( 5 )
 custom_styles/bg = ExtResource( 15 )
 range/min = 0.0
 range/max = 100.0
@@ -475,7 +475,7 @@ margin/left = 0.0
 margin/top = 0.0
 margin/right = 135.0
 margin/bottom = 8.0
-custom_styles/fg = SubResource( 4 )
+custom_styles/fg = SubResource( 6 )
 custom_styles/bg = ExtResource( 15 )
 range/min = 0.0
 range/max = 100.0
@@ -499,7 +499,7 @@ margin/left = 139.0
 margin/top = 0.0
 margin/right = 274.0
 margin/bottom = 8.0
-custom_styles/fg = SubResource( 5 )
+custom_styles/fg = SubResource( 7 )
 custom_styles/bg = ExtResource( 15 )
 range/min = 0.0
 range/max = 100.0
@@ -723,7 +723,7 @@ margin/right = 0.0
 margin/bottom = 0.0
 expand = true
 stretch_mode = 0
-script/script = SubResource( 6 )
+script/script = SubResource( 8 )
 
 [node name="NavigationPolygonInstance" type="NavigationPolygonInstance" parent="."]
 

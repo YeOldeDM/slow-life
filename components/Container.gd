@@ -26,13 +26,16 @@ func get_contents_weight():
 
 
 func can_fit(item):
-	if self.max_weight < item.get_total_weight():
-		return false
+	if self.max_weight >= 0:
+		var new_weight = get_contents_weight() + item.get_total_weight()
+		if new_weight > self.max_weight:
+			return false
 	if item.size > self.size_limit:
 		return false
 	if self.max_items >= 0:
 		if contents.size()+1 > self.max_items:
 			return false
+	print(item.get_name()+" can fit!")
 	return true
 
 func add_item(item):

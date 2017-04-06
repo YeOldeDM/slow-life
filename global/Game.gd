@@ -37,6 +37,7 @@ var daycycle
 
 # real time spent with game running
 var play_time = 0
+
 # real time spent since you ended the last play session
 var sleep_duration setget _set_sleep_duration
 var session_start_time

@@ -6,6 +6,8 @@ const ACTION_EXAMINE = 0	# Examine an Item
 const ACTION_DESTROY = 1	# Destroy (delete) an Item
 const ACTION_DROP = 2		# Move an item into the Ground container
 const ACTION_NAME = 3		# Give a name to an object
+const ACTION_ACTIVATE = 4	# Activate an object
+const ACTION_OPEN = 5		# Open a container object
 
 # Uniquer actions
 const ACTION_WORLDITEM_HARVEST = 20	# Harvest from a WorldItem
@@ -20,6 +22,10 @@ func Go(data, act_idx):
 	# Print examine text for data
 	if act_idx == ACTION_EXAMINE:
 		return examine(data)
+	
+	# Open InventoryWindow for data container
+	if act_idx == ACTION_OPEN:
+		return open(data)
 	
 	# Harvest from data
 	if act_idx == ACTION_WORLDITEM_HARVEST:
@@ -62,6 +68,11 @@ func examine(data):
 	return OK
 
 
+func open(data):
+	var win = preload('res://Inventory/ContainerWindow.tscn').instance()
+	Game.main.add_child(win)
+	win.container = data
+	win.show()
 
 
 func get_random_result_item(data,type):

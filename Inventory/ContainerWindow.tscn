@@ -1,13 +1,13 @@
 [gd_scene load_steps=7 format=1]
 
-[ext_resource path="res://Inventory/Inventory.gd" type="Script" id=1]
+[ext_resource path="res://Inventory/ContainerWindow.gd" type="Script" id=1]
 [ext_resource path="res://assets/graphics/gui/container_open.png" type="Texture" id=2]
 [ext_resource path="res://assets/graphics/gui/container_closed.png" type="Texture" id=3]
 [ext_resource path="res://resources/stylebox_blackglass.tres" type="StyleBox" id=4]
 [ext_resource path="res://Inventory/ContainerTree.gd" type="Script" id=5]
 [ext_resource path="res://misc/WindowResizer.tscn" type="PackedScene" id=6]
 
-[node name="Inventory" type="WindowDialog"]
+[node name="ContainerWindow" type="WindowDialog"]
 
 visibility/self_opacity = 0.8
 focus/ignore_mouse = false
@@ -57,7 +57,7 @@ size_flags/vertical = 3
 margin/left = 0.0
 margin/top = 14.0
 margin/right = 352.0
-margin/bottom = 432.0
+margin/bottom = 460.0
 custom_icons/arrow = ExtResource( 2 )
 custom_icons/arrow_collapsed = ExtResource( 3 )
 custom_styles/bg = ExtResource( 4 )
@@ -66,60 +66,6 @@ custom_colors/relationship_line_color = Color( 0.583435, 0.599784, 0.617188, 1 )
 custom_colors/drop_position_color = Color( 0.46225, 0.773438, 0.73697, 0.721294 )
 custom_constants/draw_relationship_lines = 1
 script/script = ExtResource( 5 )
-
-[node name="Active" type="PanelContainer" parent="frame"]
-
-focus/ignore_mouse = false
-focus/stop_mouse = true
-size_flags/horizontal = 2
-size_flags/vertical = 2
-margin/left = 0.0
-margin/top = 432.0
-margin/right = 352.0
-margin/bottom = 460.0
-
-[node name="box" type="HBoxContainer" parent="frame/Active"]
-
-focus/ignore_mouse = true
-focus/stop_mouse = true
-size_flags/horizontal = 2
-size_flags/vertical = 0
-margin/left = 7.0
-margin/top = 7.0
-margin/right = 345.0
-margin/bottom = 21.0
-alignment = 0
-
-[node name="Label" type="Label" parent="frame/Active/box"]
-
-focus/ignore_mouse = true
-focus/stop_mouse = true
-size_flags/horizontal = 2
-size_flags/vertical = 0
-margin/left = 0.0
-margin/top = 0.0
-margin/right = 79.0
-margin/bottom = 14.0
-custom_colors/font_color = Color( 0.737763, 0.738281, 0.671951, 1 )
-text = "Active Item:"
-percent_visible = 1.0
-lines_skipped = 0
-max_lines_visible = -1
-
-[node name="Item" type="Label" parent="frame/Active/box"]
-
-focus/ignore_mouse = true
-focus/stop_mouse = true
-size_flags/horizontal = 2
-size_flags/vertical = 0
-margin/left = 83.0
-margin/top = 0.0
-margin/right = 83.0
-margin/bottom = 14.0
-custom_colors/font_color = Color( 0.737763, 0.738281, 0.671951, 1 )
-percent_visible = 1.0
-lines_skipped = 0
-max_lines_visible = -1
 
 [node name="WindowResizer" parent="frame" instance=ExtResource( 6 )]
 
