@@ -1,4 +1,4 @@
-# Slow Life
+# -=Slow Life=-
 
 A text-based open-world sandbox survival adventure.
 
