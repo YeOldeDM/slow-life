@@ -725,11 +725,6 @@ expand = true
 stretch_mode = 0
 script/script = SubResource( 8 )
 
-[node name="NavigationPolygonInstance" type="NavigationPolygonInstance" parent="."]
-
-navpoly = null
-enabled = true
-
 [connection signal="confirmed" from="Quit" to="." method="_on_Quit_confirmed"]
 
 [connection signal="timeout" from="AutosaveTimer" to="." method="_on_Autosave_timeout"]

@@ -36,7 +36,7 @@ func _ready():
 	for e in ["grass", "trees", "rocks", "pond"]:
 		var itm = preload('res://WorldItem/WorldItem.tscn').instance()
 		world.add_child(itm)
-		itm.setup('res://database/worlditems/'+e+'.tres')
+		itm.setup('res://database/worlditems/'+e+'.cfg')
 
 	# Start the friggin game already
 	Game.start()

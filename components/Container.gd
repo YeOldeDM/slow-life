@@ -13,9 +13,27 @@ export(float) var max_weight = 10.0
 export(int,0,3) var size_limit = 1
 export(int,-1,99) var max_items = -1	# -1 = no max
 
-export(bool) var liquids_only = false
+export(bool) var hold_liquids = false
 
 var contents = []
+
+
+func save():
+	var data = {
+		'max_weight':	self.max_weight,
+		'size_limit':	self.size_limit,
+		'max_items':	self.max_items,
+		'hold_liquids':	self.hold_liquids,
+		}
+	
+	return data
+
+
+func restore(data):
+	for key in data:
+		if key in self:
+			set(key, data[key])
+	return OK
 
 
 func get_contents_weight():
@@ -38,13 +56,14 @@ func can_fit(item):
 	print(item.get_name()+" can fit!")
 	return true
 
+# Designate item's location as our container
 func add_item(item):
-	if item.location:
+	if item.location && item.location != owner && item in item.location.container.contents:
 		item = item.location.container.remove_item(item)
-	if can_fit(item):
-		self.contents.append(item)
-		item.location = owner
-		emit_signal('contents_changed')
+
+	self.contents.append(item)
+	item.location = owner
+	emit_signal('contents_changed')
 
 
 func remove_item(item):

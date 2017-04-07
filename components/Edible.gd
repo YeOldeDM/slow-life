@@ -12,12 +12,18 @@ export(float) var thirst = 0.0
 
 
 func save():
-	var data = {}
+	var data = {
+		'hunger':	self.hunger,
+		'thirst':	self.thirst,
+		}
 	
 	return data
 
 
 func restore(data):
+	for key in data:
+		if key in self:
+			set(key, data[key])
 	return OK
 
 

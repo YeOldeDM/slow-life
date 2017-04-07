@@ -103,6 +103,10 @@ func save_game(encrypt=false):
 		'play_time':	self.play_time + (clock.get_time() - self.session_start_time),
 
 		}
+	var save_items = []
+	for node in items.get_children():
+		save_items.append(node.save())
+	data['items'] = save_items
 	
 	# store as json and close
 	file.store_line(data.to_json())

@@ -42,12 +42,47 @@ var location	# Container this item is in, null=="limbo": the item exists, but in
 # Save/Restore methods
 
 func save():
-	var data = {}
+	var data = {
+		'item':	{
+		'_ref':				self._ref,
+		'name': 			self.name,
+		'description': 		self.description,
+		'size':				self.size,
+		'quality': 			self.quality,
+		'weight': 			self.weight,
+		'damage': 			self.damage,
+		'liquid':			self.liquid,
+		'immovable':		self.immovable,
+		'indestructible':	self.indestructible,
+		
+		'equip_slots':		self.equip_slots,
+		'location':			self.location,
+		}
+	}
+	
+	
+	if edible:
+		data['edible'] = edible.save()
+	if equippable:
+		data['equippable'] = equippable.save()
+	if container:
+		data['container'] = container.save()
+	if device:
+		data['device'] = device.save()
 	
 	return data
 
 
 func restore(data):
+	if 'item' in data:
+		for key in data.item:
+			set(key, data.item[key])
+	for key in data:
+		if key != 'item':
+			var comp = load('res://components/'+key.capitalize()+'.tscn').instance()
+			add_child(comp)
+			comp.restore(data[key])
+	
 	return OK
 
 

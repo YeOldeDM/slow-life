@@ -16,12 +16,18 @@ var worn_on = null
 
 
 func save():
-	var data = {}
+	var data = {
+		'fits_slot':	self.fits_slot,
+		'worn_on':		self.worn_on,
+		}
 	
 	return data
 
 
 func restore(data):
+	for key in data:
+		if key in self:
+			set(key, data[key])
 	return OK
 
 
@@ -30,6 +36,7 @@ func equip(to, slot):
 	self.worn_on = [to, slot]
 	if !slot in to.equipped:
 		to.equipped[slot] = owner
+	owner.location = to
 	emit_signal('put_on')
 
 

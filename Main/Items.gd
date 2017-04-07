@@ -1,5 +1,12 @@
 extends Control
 
+
+const DATABASE = 'res://database/'
+const DATAEXT = '.cfg'
+
+func create_from_database(partial_path='natural/rock'):
+	return create_item(DATABASE + partial_path + DATAEXT)
+
 # Factory method to create an Item scene from cfg file @path
 func create_item(path):
 	var data = ConfigFile.new()
@@ -45,16 +52,46 @@ func create_item(path):
 	return itm
 
 
+func restore_items(data):
+	# Spawn and set items
+	for entry in data:
+		var item = preload('res://Item/Item.tscn').instance()
+		add_child(item)
+		item.restore(data)
+	
+	# Put items in their locations
+	for node in get_children():
+		if node.location:
+			node.location.container.add_item(node)
+
+func spawn_initial_items():
+	var path = 'res://database/init_inv.cfg'
+	var cfg = ConfigFile.new()
+	var opened = cfg.load(path)
+	if !opened:
+		print("Couldn't open " +path)
+		print("Initial Items not spawned!!!")
+	var data = {}
+	for key in cfg.get_section_keys('Items'):
+		data[key] = Game.inventory.add_item(create_from_database(cfg.get_value("Items", key)), null, true)
+	Game.inventory.ground = data.ground
+	Game.inventory.body = {
+		'head':		data.head,
+		'torso':	data.torso,
+		'hands':	data.hands,
+		'legs':		data.legs,
+		'feet':		data.feet
+		}
 
 func _ready():
 	Game.items = self
 	
-	var head = Game.inventory.add_item(create_item('res://database/bodyparts/head.tres'),null,true)
-	var torso = Game.inventory.add_item(create_item('res://database/bodyparts/torso.tres'),null,true)
-	var hands = Game.inventory.add_item(create_item('res://database/bodyparts/hands.tres'),null,true)
-	var legs = Game.inventory.add_item(create_item('res://database/bodyparts/legs.tres'),null,true)
-	var feet = Game.inventory.add_item(create_item('res://database/bodyparts/feet.tres'),null,true)
-	var ground = Game.inventory.add_item(create_item('res://database/bodyparts/ground.tres'),null,true)
+	var head = Game.inventory.add_item(create_from_database('bodyparts/head'),null,true)
+	var torso = Game.inventory.add_item(create_from_database('bodyparts/torso'),null,true)
+	var hands = Game.inventory.add_item(create_from_database('bodyparts/hands'),null,true)
+	var legs = Game.inventory.add_item(create_from_database('bodyparts/legs'),null,true)
+	var feet = Game.inventory.add_item(create_from_database('bodyparts/feet'),null,true)
+	var ground = Game.inventory.add_item(create_from_database('bodyparts/ground'),null,true)
 	Game.inventory.ground = ground
 	Game.inventory.body = {
 		'head':		head,
@@ -64,13 +101,8 @@ func _ready():
 		'feet':		feet
 		}
 	
-	var backpack = create_item('res://database/crafted/backpack.tres')
-	var rock = create_item('res://database/natural/rock.tres')
-	var bp = Game.inventory.add_item(backpack, torso)
+	var backpack = create_from_database('crafted/backpack')
+	var rock = create_from_database('natural/rock')
+	var bp = Game.inventory.add_item(backpack, ground)
 	Game.inventory.default_container = bp
-	Game.inventory.add_item(rock,bp)
-
-
-	
-	
-	
+	Game.inventory.add_item(rock)

@@ -85,7 +85,8 @@ func add_item(item,parent=null,root_item=false,equip=false):
 	itm.set_text(1, str(my.quality).pad_decimals(2))
 	itm.set_text(2, str(my.damage).pad_decimals(2))
 	itm.set_text(3, str(my.get_total_weight()).pad_decimals(2))
-	
+
+
 
 	# Add Item to parent Item's container
 	if !equip:
@@ -94,11 +95,12 @@ func add_item(item,parent=null,root_item=false,equip=false):
 			if pitem.container:
 				pitem.container.add_item(my)
 	
-	if item.container:
-		for i in item.container.contents:
-			add_item(i,itm)
-	
 	return itm
+#	if item.container:
+#		for i in item.container.contents:
+#			add_item(i,itm)
+#	
+#	return itm
 
 
 # Move data into itm container
@@ -107,23 +109,35 @@ func move_item(data, itm):
 		Game.console.message("Dragging "+data.get_text(0)+" to "+itm.get_text(0))
 		var item = itm.get_meta('item')
 		if item.container:
-			if item.container.can_fit(data.get_meta('item')):
-				var moved_itm = add_item(data.get_meta('item'),itm)
-				if self.active_item == data:
-					set_active_item(moved_itm)
-				data.get_parent().remove_child(data)
-				Game.task_board.message("You put the "+data.get_text(0)+ " in the " +itm.get_text(0)+ ".")
+			var moved_itm = add_item(data.get_meta('item'),itm)
+			# Transfer active item
+			if self.active_item == data:
+				set_active_item(moved_itm)
+			# Transfer default container
+			if self.default_container == data:
+				self.default_container = moved_itm
+			
+			# Transfer container contents
+			var i = data.get_children()
+			while i:
+				move_item(i,moved_itm)
+				i = data.get_next()
+			
+			data.get_parent().remove_child(data)
+			Game.task_board.message("You put the "+data.get_text(0)+ " in the " +itm.get_text(0)+ ".")
 		else:
 			Game.task_board.message("The "+data.get_text(0)+" wont fit in the "+itm.get_text(0)+".")
 		#set_drop_mode_flags(DROP_MODE_DISABLED)
 
 
-func equip_item(itm, wearer):
+func equip_item(itm, wearer, slot):
 	var item = itm.get_meta('item').location.container.remove_item(itm.get_meta('item'))
-	item.equippable.equip(wearer.get_meta('item'))
+	item.equippable.equip(wearer.get_meta('item'),slot)
 	
-	itm.get_parent.remove_child(itm)
-	add_item(item,wearer,false,true)
+	itm.get_parent().remove_child(itm)
+	var new_itm = add_item(item,wearer,false,true)
+	for i in item.container.contents:
+		add_item(i,new_itm,false,true)
 
 
 # Update item column property from item signals
@@ -191,15 +205,17 @@ func show_actions_menu(pos):
 			partsmenu.set_name('partsmenu')
 			
 			for part in parts:
-				part = part.get_meta('item')
+				var prt = part.get_meta('item')
 				var slotsmenu = PopupMenu.new()
 				partsmenu.add_child(slotsmenu)
 				slotsmenu.set_name('slotsmenu')
-				slotsmenu.connect("item_pressed", self, "_on_item_action_pressed", [slotsmenu])
-				for slot in part.equip_slots:
+				slotsmenu.connect("item_pressed", self, "_on_equip_action_pressed",[slotsmenu,part])
+				var i = 0
+				for slot in prt.equip_slots:
 					if slot in item.equippable.fits_slot:
-						slotsmenu.add_item(slot, Action.ACTION_EQUIP)
-				partsmenu.add_submenu_item(part.name,'slotsmenu')
+						slotsmenu.add_item(slot, i)
+						i += 1
+				partsmenu.add_submenu_item(prt.name,'slotsmenu')
 			menu.add_submenu_item("Equip", 'partsmenu')
 		
 	# Menu footer
@@ -270,7 +286,7 @@ func _on_ContainerTree_item_activated():
 
 # On option clicked from item rmb menu
 # idx should correspond to Action.ACTION_*
-func _on_item_action_pressed(idx, param=null):
+func _on_item_action_pressed(idx):
 	printt(get_selected().get_text(0), idx)
 	var item = get_selected().get_meta('item')
 	if item:
@@ -281,13 +297,15 @@ func _on_item_action_pressed(idx, param=null):
 			move_item(get_selected(), self.ground)
 			return
 		
-		# Equip - WTF to do...
-		elif idx == Action.ACTION_EQUIP:
-			var slot = param
 		
 		var err = Action.Go(item, idx)
 
 
+func _on_equip_action_pressed(idx,menu,wearer):
+	var slot = menu.get_item_text(idx)
+	var itm = get_selected()
+	
+	equip_item(itm,wearer,slot)
 
 
 

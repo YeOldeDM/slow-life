@@ -49,11 +49,13 @@ func examine(data):
 
 	if data extends preload('res://Item/Item.gd'):
 		if data.container:
-			txt += ' This can act as a container for other items. '
+			txt += ' This can act as a container for other items.'
 		if data.equippable:
-			txt += ' This item can be equipped. '
+			txt += ' This item can be equipped.'
+			if data.equippable.worn_on != null:
+				txt += ' This is being worn on the ' +data.equippable.worn_on[1]+ ' of your ' +data.equippable.worn_on[0].name+ '.'
 		if data.edible:
-			txt += ' This can be eaten. '
+			txt += ' This can be eaten.'
 		if data.device:
 			var uses = "[ "
 			var d = data.device.uses
@@ -63,7 +65,9 @@ func examine(data):
 				for i in range(d.size()-1):
 					uses += '"' +d[i]+ '" '
 			txt += ' This can be activated as a tool to ' +uses+ '].'
-	
+		if data.location:
+			txt += ' Location: ' +data.location.get_name()
+		
 	Game.observe_board.message("\nYou carefully examine the " +data.name+ "...")
 	Game.observe_board.message(txt)
 	return OK
