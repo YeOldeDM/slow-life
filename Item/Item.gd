@@ -6,7 +6,8 @@ signal quality_changed(val)
 signal weight_changed(val)
 signal damage_changed(val)
 
-var _ref
+var _ref		# set by item loader
+var _treeitem	# set by treeitem
 
 # Params
 export(String, MULTILINE) var name = "NoName" setget _set_name
@@ -102,6 +103,20 @@ func get_total_weight():
 	return total
 
 
+func remove_from_location():
+	if self.location:
+		return self.location.container.remove_item(self)
+
+func add_item(item):
+	if self.container:
+		self.container.add_item(item)
+
+func get_contents():
+	var items = self.equipped.values()
+	if self.container:
+		for i in self.container.contents:
+			items.append(i)
+	return items
 
 # Private methods
 func _ready():

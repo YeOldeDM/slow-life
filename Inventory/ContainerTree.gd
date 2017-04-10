@@ -26,8 +26,11 @@ var active_item setget _set_active_item
 
 
 
-func is_inventory():
-	return get_node('../../') extends preload('res://Inventory/Inventory.gd')
+#func is_inventory():
+#	return get_node('../../') extends preload('res://Inventory/Inventory.gd')
+func item(itm):
+	return itm.get_metadata(0)
+
 
 func get_active_item():
 	return self.active_item.get_meta('item')
@@ -43,32 +46,26 @@ func set_active_item(itm):
 	self.active_item = itm
 
 
-func add_item(item,parent=null,root_item=false,equip=false):
-	if root_item: parent = root
-	elif !parent: 
-		if default_container != null:
-			parent = default_container
-	
-	var itm = create_item(parent)
-	itm.set_meta('item',item)
-	itm.set_selectable(1,false)
-	itm.set_selectable(2,false)
-	itm.set_selectable(3,false)
-	
-	var my = item
+func add_treeitem(item, location):
+	# Create treeitem and link to item
+	var itm = create_item(location)
+	itm.set_metadata(0, item)
+	item._treeitem = itm
+	for i in range(1,get_columns()):
+		itm.set_selectable(i,false)
 	# connect item signals
-	if !my.is_connected('name_changed', self, 'update_item_text'):
-		my.connect('name_changed', self, 'update_item_text', [itm,0])
-	if !my.is_connected('quality_changed', self, 'update_item_text'):
-		my.connect('quality_changed', self, 'update_item_text', [itm,1])
-	if !my.is_connected('damage_changed', self, 'update_item_text'):
-		my.connect('damage_changed', self, 'update_item_text', [itm,2])
-	if !my.is_connected('weight_changed', self, 'update_item_text'):
-		my.connect('weight_changed', self, 'update_item_text', [itm,3])
-	
+	if !item.is_connected('name_changed', self, 'update_item_text'):
+		item.connect('name_changed', self, 'update_item_text', [itm,0])
+	if !item.is_connected('quality_changed', self, 'update_item_text'):
+		item.connect('quality_changed', self, 'update_item_text', [itm,1])
+	if !item.is_connected('damage_changed', self, 'update_item_text'):
+		item.connect('damage_changed', self, 'update_item_text', [itm,2])
+	if !item.is_connected('weight_changed', self, 'update_item_text'):
+		item.connect('weight_changed', self, 'update_item_text', [itm,3])
+
 	# set item icon
 	var icon = null
-	var ref = my.get_ref()
+	var ref = item.get_ref()
 	if ref:
 		# look for and load icon
 		var iconpath = icondir+ref+'.png'
@@ -81,21 +78,87 @@ func add_item(item,parent=null,root_item=false,equip=false):
 	itm.set_icon(0, icon)
 
 	# set treeitem text
-	itm.set_text(0, my.name)
-	itm.set_text(1, str(my.quality).pad_decimals(2))
-	itm.set_text(2, str(my.damage).pad_decimals(2))
-	itm.set_text(3, str(my.get_total_weight()).pad_decimals(2))
-
-
-
-	# Add Item to parent Item's container
-	if !equip:
-		if parent != root:
-			var pitem = parent.get_meta('item')
-			if pitem.container:
-				pitem.container.add_item(my)
+	itm.set_text(0, item.name)
+	itm.set_text(1, str(item.quality).pad_decimals(2))
+	itm.set_text(2, str(item.damage).pad_decimals(2))
+	itm.set_text(3, str(item.get_total_weight()).pad_decimals(2))
 	
 	return itm
+
+
+func move_treeitem(itm, to_itm):
+	var item = item(itm)
+	item.remove_from_location()
+	var is_default = itm == self.default_container
+	var is_active = itm == self.active_item
+	itm = itm.get_parent().remove_child(itm)
+	var new_itm = add_treeitem(item,to_itm)
+	item(to_itm).add_item(item)
+	if is_default: self.default_container = new_itm
+	if is_active: set_active_item(new_itm)
+	print(item.get_contents())
+	if !item.get_contents().empty():
+		for i in item.get_contents():
+			move_treeitem(i,new_itm)
+
+
+
+func add_item(item,parent=null,root_item=false,equip=false):
+	
+	if root_item: parent = root
+	elif !parent: 
+		if default_container != null:
+			parent = default_container
+	if !root: item(parent).add_item(item)
+	return add_treeitem(item,parent)
+	
+#	var itm = create_item(parent)
+#	itm.set_meta('item',item)
+#	itm.set_selectable(1,false)
+#	itm.set_selectable(2,false)
+#	itm.set_selectable(3,false)
+#	
+#	var my = item
+#	# connect item signals
+#	if !my.is_connected('name_changed', self, 'update_item_text'):
+#		my.connect('name_changed', self, 'update_item_text', [itm,0])
+#	if !my.is_connected('quality_changed', self, 'update_item_text'):
+#		my.connect('quality_changed', self, 'update_item_text', [itm,1])
+#	if !my.is_connected('damage_changed', self, 'update_item_text'):
+#		my.connect('damage_changed', self, 'update_item_text', [itm,2])
+#	if !my.is_connected('weight_changed', self, 'update_item_text'):
+#		my.connect('weight_changed', self, 'update_item_text', [itm,3])
+#	
+#	# set item icon
+#	var icon = null
+#	var ref = my.get_ref()
+#	if ref:
+#		# look for and load icon
+#		var iconpath = icondir+ref+'.png'
+#		var x = File.new().file_exists(iconpath)
+#		if x:
+#			icon = load(icondir+ref+'.png')
+#	# Use fallback icon if none can be loaded
+#	if !icon:
+#		icon = NO_ICON
+#	itm.set_icon(0, icon)
+#
+#	# set treeitem text
+#	itm.set_text(0, my.name)
+#	itm.set_text(1, str(my.quality).pad_decimals(2))
+#	itm.set_text(2, str(my.damage).pad_decimals(2))
+#	itm.set_text(3, str(my.get_total_weight()).pad_decimals(2))
+#
+#
+#
+#	# Add Item to parent Item's container
+#	if !equip:
+#		if parent != root:
+#			var pitem = parent.get_meta('item')
+#			if pitem.container:
+#				pitem.container.add_item(my)
+#	
+#	return itm
 #	if item.container:
 #		for i in item.container.contents:
 #			add_item(i,itm)
@@ -153,7 +216,7 @@ func show_actions_menu(pos):
 	var itm = get_item_at_pos(pos)
 	if !itm: return
 	itm.select(0)
-	var item = itm.get_meta('item')
+	var item = item(itm)
 	var menu = PopupMenu.new()
 	add_child(menu)
 	
@@ -241,7 +304,7 @@ func show_actions_menu(pos):
 func get_drag_data(pos):
 	set_drop_mode_flags(DROP_MODE_INBETWEEN + DROP_MODE_ON_ITEM)
 	var item = get_item_at_pos(pos)
-	if !item.get_meta('item').immovable:
+	if !item(item).immovable:
 		var box = Button.new()
 		box.set_flat(true)
 		box.set_button_icon(item.get_icon(0))
@@ -251,7 +314,7 @@ func get_drag_data(pos):
 		#print(item.get_text(0))
 
 func can_drop_data(pos, data):
-	if data.has_meta('item'):
+	if item(data) extends preload('res://Item/Item.gd'):
 		return true
 	return false
 
@@ -260,7 +323,7 @@ func drop_data(pos,data):
 	# itm=drag target TreeItem
 	# item=drag target Item
 	var itm = get_item_at_pos(pos)
-	move_item(data, itm)
+	move_treeitem(data, itm)
 
 
 
