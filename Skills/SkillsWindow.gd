@@ -25,6 +25,7 @@ func build_tree():
 
 func add_skill(skill, parent):
 	var itm = tree.create_item(parent)
+	itm.set_collapsed(true)
 	itm.set_meta('skill',skill)
 	itm.set_text(0, str(skill.get_name()))
 	itm.set_text(1, str(skill.get_score()).pad_decimals(2))

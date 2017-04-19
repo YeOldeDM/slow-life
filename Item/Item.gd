@@ -18,6 +18,7 @@ export(float) var weight = 1.0 setget _set_weight
 
 export(bool) var liquid = false
 
+export(bool) var can_activate = true
 export(bool) var immovable = false
 export(bool) var indestructible = false
 

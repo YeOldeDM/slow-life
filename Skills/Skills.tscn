@@ -14,47 +14,141 @@ score = 1.0
 
 [node name="Crafting" parent="Level" instance=ExtResource( 2 )]
 
-editor/display_folded = true
 ID = "crafting"
 score = 1.0
 
 [node name="Woodworking" parent="Level/Crafting" instance=ExtResource( 2 )]
 
+editor/display_folded = true
 ID = "woodworking"
+score = 1.0
+
+[node name="Carpentry" parent="Level/Crafting/Woodworking" instance=ExtResource( 2 )]
+
+ID = "carpentry"
+score = 1.0
+
+[node name="Woodcraft" parent="Level/Crafting/Woodworking" instance=ExtResource( 2 )]
+
+ID = "woodcraft"
 score = 1.0
 
 [node name="Stoneworking" parent="Level/Crafting" instance=ExtResource( 2 )]
 
+editor/display_folded = true
 ID = "stoneworking"
+score = 1.0
+
+[node name="Masonry" parent="Level/Crafting/Stoneworking" instance=ExtResource( 2 )]
+
+ID = "masonry"
+score = 1.0
+
+[node name="Stonecraft" parent="Level/Crafting/Stoneworking" instance=ExtResource( 2 )]
+
+ID = "stonecraft"
 score = 1.0
 
 [node name="Metalworking" parent="Level/Crafting" instance=ExtResource( 2 )]
 
+editor/display_folded = true
 ID = "metalworking"
+score = 1.0
+
+[node name="Blacksmithing" parent="Level/Crafting/Metalworking" instance=ExtResource( 2 )]
+
+ID = "blacksmithing"
+score = 1.0
+
+[node name="Metalcraft" parent="Level/Crafting/Metalworking" instance=ExtResource( 2 )]
+
+ID = "metalcraft"
 score = 1.0
 
 [node name="Earthworking" parent="Level/Crafting" instance=ExtResource( 2 )]
 
+editor/display_folded = true
 ID = "earthworking"
+score = 1.0
+
+[node name="Pottery" parent="Level/Crafting/Earthworking" instance=ExtResource( 2 )]
+
+ID = "pottery"
+score = 1.0
+
+[node name="Claycraft" parent="Level/Crafting/Earthworking" instance=ExtResource( 2 )]
+
+ID = "claycraft"
 score = 1.0
 
 [node name="Clothworking" parent="Level/Crafting" instance=ExtResource( 2 )]
 
+editor/display_folded = true
 ID = "clothworking"
+score = 1.0
+
+[node name="Spinning" parent="Level/Crafting/Clothworking" instance=ExtResource( 2 )]
+
+ID = "spinning"
+score = 1.0
+
+[node name="Weaving" parent="Level/Crafting/Clothworking" instance=ExtResource( 2 )]
+
+ID = "weaving"
+score = 1.0
+
+[node name="Knitting" parent="Level/Crafting/Clothworking" instance=ExtResource( 2 )]
+
+ID = "knitting"
 score = 1.0
 
 [node name="Labor" parent="Level" instance=ExtResource( 2 )]
 
-editor/display_folded = true
 ID = "labor"
 score = 1.0
 
 [node name="Activity" parent="Level/Labor" instance=ExtResource( 2 )]
 
+editor/display_folded = true
 ID = "activity"
 score = 1.0
 
+[node name="Digging" parent="Level/Labor/Activity" instance=ExtResource( 2 )]
+
+ID = "digging"
+score = 1.0
+
+[node name="Chopping" parent="Level/Labor/Activity" instance=ExtResource( 2 )]
+
+ID = "chopping"
+score = 1.0
+
+[node name="Building" parent="Level/Labor/Activity" instance=ExtResource( 2 )]
+
+ID = "building"
+score = 1.0
+
+[node name="Carving" parent="Level/Labor/Activity" instance=ExtResource( 2 )]
+
+ID = "carving"
+score = 1.0
+
 [node name="Tools" parent="Level/Labor" instance=ExtResource( 2 )]
+
+ID = "tools"
+score = 1.0
+
+[node name="Axes" parent="Level/Labor/Tools" instance=ExtResource( 2 )]
+
+ID = "tools"
+score = 1.0
+
+[node name="Hammers" parent="Level/Labor/Tools" instance=ExtResource( 2 )]
+
+ID = "tools"
+score = 1.0
+
+[node name="Knives" parent="Level/Labor/Tools" instance=ExtResource( 2 )]
 
 ID = "tools"
 score = 1.0

@@ -64,45 +64,50 @@ func restore_items(data):
 		if node.location:
 			node.location.container.add_item(node)
 
+
 func spawn_initial_items():
 	var path = 'res://database/init_inv.cfg'
 	var cfg = ConfigFile.new()
 	var opened = cfg.load(path)
-	if !opened:
+	if !opened == OK:
 		print("Couldn't open " +path)
 		print("Initial Items not spawned!!!")
+		return
 	var data = {}
+	print(cfg.get_section_keys('Items'))
 	for key in cfg.get_section_keys('Items'):
-		data[key] = Game.inventory.add_item(create_from_database(cfg.get_value("Items", key)), null, true)
-	Game.inventory.ground = data.ground
-	Game.inventory.body = {
+		data[key] = create_from_database(cfg.get_value("Items", key))
+	var base = {
 		'head':		data.head,
 		'torso':	data.torso,
 		'hands':	data.hands,
 		'legs':		data.legs,
-		'feet':		data.feet
+		'feet':		data.feet,
+		'ground':	data.ground
 		}
+	Game.inventory.build_tree()
+
 
 func _ready():
 	Game.items = self
-	
-	var head = Game.inventory.add_item(create_from_database('bodyparts/head'),null,true)
-	var torso = Game.inventory.add_item(create_from_database('bodyparts/torso'),null,true)
-	var hands = Game.inventory.add_item(create_from_database('bodyparts/hands'),null,true)
-	var legs = Game.inventory.add_item(create_from_database('bodyparts/legs'),null,true)
-	var feet = Game.inventory.add_item(create_from_database('bodyparts/feet'),null,true)
-	var ground = Game.inventory.add_item(create_from_database('bodyparts/ground'),null,true)
-	Game.inventory.ground = ground
-	Game.inventory.body = {
-		'head':		head,
-		'torso':	torso,
-		'hands':	hands,
-		'legs':		legs,
-		'feet':		feet
-		}
-	
-	var backpack = create_from_database('crafted/backpack')
-	var rock = create_from_database('natural/rock')
-	var bp = Game.inventory.add_item(backpack, ground)
-	Game.inventory.default_container = bp
-	Game.inventory.add_item(rock)
+	#spawn_initial_items()
+#	var head = Game.inventory.add_item(create_from_database('bodyparts/head'),null,true)
+#	var torso = Game.inventory.add_item(create_from_database('bodyparts/torso'),null,true)
+#	var hands = Game.inventory.add_item(create_from_database('bodyparts/hands'),null,true)
+#	var legs = Game.inventory.add_item(create_from_database('bodyparts/legs'),null,true)
+#	var feet = Game.inventory.add_item(create_from_database('bodyparts/feet'),null,true)
+#	var ground = Game.inventory.add_item(create_from_database('bodyparts/ground'),null,true)
+#	Game.inventory.ground = ground
+#	Game.inventory.body = {
+#		'head':		head,
+#		'torso':	torso,
+#		'hands':	hands,
+#		'legs':		legs,
+#		'feet':		feet
+#		}
+#	
+#	var backpack = create_from_database('crafted/backpack')
+#	var rock = create_from_database('natural/rock')
+#	var bp = Game.inventory.add_item(backpack, ground)
+#	Game.inventory.default_container = bp
+#	Game.inventory.add_item(rock)

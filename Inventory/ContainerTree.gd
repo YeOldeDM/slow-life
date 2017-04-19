@@ -10,24 +10,38 @@ var columns = ['Name', 'QL', 'Dmg', 'Wt']
 
 var root
 
-var body = {
+var base = {
 	'head':		null,
 	'torso':	null,
 	'hands':	null,
 	'legs':		null,
-	'feet':		null
+	'feet':		null,
+	'ground':	null
 	}
 
 var default_container
-var ground
+
 
 var active_item setget _set_active_item
 
 
+func build_tree():
+	clear()
+	for key in self.base:
+		var itm = add_treeitem(self.base[key], root)
+		for i in item(itm).get_contents():
+			build_contents(i,itm)
 
 
-#func is_inventory():
-#	return get_node('../../') extends preload('res://Inventory/Inventory.gd')
+func build_contents(item,cont):
+	var itm = add_treeitem(item,cont)
+	if !item(itm).get_contents().empty():
+		for i in item(itm).get_contents():
+			build_contents(i._treeitem,itm)
+
+
+
+
 func item(itm):
 	return itm.get_metadata(0)
 

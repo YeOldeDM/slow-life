@@ -14,12 +14,16 @@
 [sub_resource type="Curve2D" id=1]
 
 bake_interval = 5.0
-_data = { "points":Vector2Array( 0, 0, -656.92, 9.31801, -544, -992, 0, 0, -218.973, 568.399, -1344, -544, 0, 0, 759.418, -107.157, -768, 0, 0, 0, -135.111, -451.924, -32, -544, 0, 0, 0, 0, -544, -992 ) }
+_data = {
+"points": Vector2Array( 0, 0, -656.92, 9.31801, -544, -992, 0, 0, -218.973, 568.399, -1344, -544, 0, 0, 759.418, -107.157, -768, 0, 0, 0, -135.111, -451.924, -32, -544, 0, 0, 0, 0, -544, -992 )
+}
 
 [sub_resource type="Curve2D" id=2]
 
 bake_interval = 5.0
-_data = { "points":Vector2Array( 0, 0, 508.775, 8.40951, -480, -32, 0, 0, -84.0951, -491.956, -32, -608, 0, 0, -336.38, 159.781, -672, -992, 0, 0, -8.40951, 462.523, -992, -512, 0, 0, 0, 0, -480, -32 ) }
+_data = {
+"points": Vector2Array( 0, 0, 508.775, 8.40951, -480, -32, 0, 0, -84.0951, -491.956, -32, -608, 0, 0, -336.38, 159.781, -672, -992, 0, 0, -8.40951, 462.523, -992, -512, 0, 0, 0, 0, -480, -32 )
+}
 
 [sub_resource type="ColorRamp" id=3]
 
@@ -48,7 +52,34 @@ font/font = ExtResource( 9 )
 
 [sub_resource type="CanvasItemShader" id=7]
 
-_code = { "fragment":"uniform texture vignette;\nfloat radius = 0.002;\nvec3 col = vec3(0);\n\ncol+= texscreen(SCREEN_UV+vec2(-radius,-radius));\ncol+= texscreen(SCREEN_UV+vec2(0,-radius));\ncol+= texscreen(SCREEN_UV+vec2(radius,-radius));\n\ncol+= texscreen(SCREEN_UV+vec2(-radius,0));\ncol+= texscreen(SCREEN_UV+vec2(0,0));\ncol+= texscreen(SCREEN_UV+vec2(radius,0));\n\n\ncol+= texscreen(SCREEN_UV+vec2(-radius,radius));\ncol+= texscreen(SCREEN_UV+vec2(0,radius));\ncol+= texscreen(SCREEN_UV+vec2(radius,radius));\n\ncol/=8.0;\nCOLOR.rgb=col;\n\n", "fragment_ofs":0, "light":"", "light_ofs":0, "vertex":"", "vertex_ofs":0 }
+_code = {
+"fragment": "uniform texture vignette;
+float radius = 0.002;
+vec3 col = vec3(0);
+
+col+= texscreen(SCREEN_UV+vec2(-radius,-radius));
+col+= texscreen(SCREEN_UV+vec2(0,-radius));
+col+= texscreen(SCREEN_UV+vec2(radius,-radius));
+
+col+= texscreen(SCREEN_UV+vec2(-radius,0));
+col+= texscreen(SCREEN_UV+vec2(0,0));
+col+= texscreen(SCREEN_UV+vec2(radius,0));
+
+
+col+= texscreen(SCREEN_UV+vec2(-radius,radius));
+col+= texscreen(SCREEN_UV+vec2(0,radius));
+col+= texscreen(SCREEN_UV+vec2(radius,radius));
+
+col/=8.0;
+COLOR.rgb=col;
+
+",
+"fragment_ofs": 0,
+"light": "",
+"light_ofs": 0,
+"vertex": "",
+"vertex_ofs": 0
+}
 
 [sub_resource type="CanvasItemMaterial" id=8]
 
@@ -65,47 +96,92 @@ tracks/0/type = "value"
 tracks/0/path = NodePath("SunPath/PathFollow2D:unit_offset")
 tracks/0/interp = 2
 tracks/0/imported = false
-tracks/0/keys = { "times":FloatArray( 0, 240 ), "transitions":FloatArray( 1, 1 ), "update":0, "values":[ 0.0, 1.0 ] }
+tracks/0/keys = {
+"times": FloatArray( 0, 240 ),
+"transitions": FloatArray( 1, 1 ),
+"update": 0,
+"values": [ 0.0, 1.0 ]
+}
 tracks/1/type = "value"
 tracks/1/path = NodePath("Sky:modulate")
 tracks/1/interp = 2
 tracks/1/imported = false
-tracks/1/keys = { "times":FloatArray( 0, 30.2, 120, 150.3, 161.4, 192.8 ), "transitions":FloatArray( 1, 1, 1, 1, 1, 1 ), "update":0, "values":[ Color( 0.0927734, 0.0989151, 0.25, 1 ), Color( 0.199303, 0.124502, 0.163072, 1 ), Color( 0.401245, 0.476313, 0.675781, 1 ), Color( 0.307868, 0.364508, 0.51501, 1 ), Color( 0.386719, 0.272218, 0.196381, 1 ), Color( 0.012907, 0.0113525, 0.03125, 1 ) ] }
+tracks/1/keys = {
+"times": FloatArray( 0, 45.8, 58.3, 67.2, 120, 150.3, 161.4, 192.8, 222.5 ),
+"transitions": FloatArray( 1, 1, 1, 1, 1, 1, 1, 1, 1 ),
+"update": 0,
+"values": [ Color( 0.0927734, 0.0989151, 0.25, 1 ), Color( 0.0901961, 0.0980392, 0.247059, 1 ), Color( 0.394485, 0.395939, 0.402344, 1 ), Color( 0.427537, 0.429688, 0.36087, 1 ), Color( 0.401245, 0.476313, 0.675781, 1 ), Color( 0.307868, 0.364508, 0.51501, 1 ), Color( 0.386719, 0.272218, 0.196381, 1 ), Color( 0.012907, 0.0113525, 0.03125, 1 ), Color( 0.178772, 0.180258, 0.226563, 1 ) ]
+}
 tracks/2/type = "value"
 tracks/2/path = NodePath("SunPath/PathFollow2D/Sunglare:scale")
 tracks/2/interp = 2
 tracks/2/imported = false
-tracks/2/keys = { "times":FloatArray( 56.9, 120.1, 181.1, 223.2 ), "transitions":FloatArray( 1, 1, 1, 1 ), "update":0, "values":[ 21.0, 11.0, 25.0, 5.0 ] }
+tracks/2/keys = {
+"times": FloatArray( 56.9, 120.1, 181.1, 223.2 ),
+"transitions": FloatArray( 1, 1, 1, 1 ),
+"update": 0,
+"values": [ 21.0, 11.0, 25.0, 5.0 ]
+}
 tracks/3/type = "value"
 tracks/3/path = NodePath("Stars:modulate")
 tracks/3/interp = 2
 tracks/3/imported = false
-tracks/3/keys = { "times":FloatArray( 0, 57.3, 120.1, 147.3, 240 ), "transitions":FloatArray( 1, 1, 1, 1, 1 ), "update":0, "values":[ Color( 0.867188, 0.968872, 1, 1 ), Color( 0.867188, 0.968872, 1, 1 ), Color( 0.867188, 0.968872, 1, 0 ), Color( 0.867188, 0.968872, 1, 0 ), Color( 0.867188, 0.968872, 1, 1 ) ] }
+tracks/3/keys = {
+"times": FloatArray( 0, 57.3, 120.1, 147.3, 240 ),
+"transitions": FloatArray( 1, 1, 1, 1, 1 ),
+"update": 0,
+"values": [ Color( 0.867188, 0.968872, 1, 1 ), Color( 0.867188, 0.968872, 1, 1 ), Color( 0.867188, 0.968872, 1, 0 ), Color( 0.867188, 0.968872, 1, 0 ), Color( 0.867188, 0.968872, 1, 1 ) ]
+}
 tracks/4/type = "value"
 tracks/4/path = NodePath("SunPath/PathFollow2D/Sunglare:energy")
 tracks/4/interp = 2
 tracks/4/imported = false
-tracks/4/keys = { "times":FloatArray( 0, 79.9, 120.3, 147.9, 176.5, 240 ), "transitions":FloatArray( 1, 1, 1, 1, 1, 1 ), "update":0, "values":[ 25.0, 25.0, 10.0, 13.4586, 25.0, 25.0 ] }
+tracks/4/keys = {
+"times": FloatArray( 0, 79.9, 120.3, 147.9, 176.5, 240 ),
+"transitions": FloatArray( 1, 1, 1, 1, 1, 1 ),
+"update": 0,
+"values": [ 25.0, 25.0, 10.0, 13.4586, 25.0, 25.0 ]
+}
 tracks/5/type = "value"
 tracks/5/path = NodePath("MoonPath/PathFollow2D:unit_offset")
 tracks/5/interp = 2
 tracks/5/imported = false
-tracks/5/keys = { "times":FloatArray( 0, 240 ), "transitions":FloatArray( 1, 1 ), "update":0, "values":[ 0.0, 1.0 ] }
+tracks/5/keys = {
+"times": FloatArray( 0, 240 ),
+"transitions": FloatArray( 1, 1 ),
+"update": 0,
+"values": [ 0.0, 1.0 ]
+}
 tracks/6/type = "value"
 tracks/6/path = NodePath("MoonPath/PathFollow2D/Moon:modulate")
 tracks/6/interp = 2
 tracks/6/imported = false
-tracks/6/keys = { "times":FloatArray( 0, 44.4, 188.3, 240 ), "transitions":FloatArray( 1, 1, 1, 1 ), "update":0, "values":[ Color( 1, 1, 1, 1 ), Color( 0.167705, 0.166626, 0.304688, 1 ), Color( 0.741739, 0.741028, 0.832031, 1 ), Color( 1, 1, 1, 1 ) ] }
+tracks/6/keys = {
+"times": FloatArray( 0, 44.4, 188.3, 240 ),
+"transitions": FloatArray( 1, 1, 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 1 ), Color( 0.167705, 0.166626, 0.304688, 1 ), Color( 0.741739, 0.741028, 0.832031, 1 ), Color( 1, 1, 1, 1 ) ]
+}
 tracks/7/type = "value"
 tracks/7/path = NodePath("SunPath/PathFollow2D/Sunglare/SunCore:scale")
 tracks/7/interp = 2
 tracks/7/imported = false
-tracks/7/keys = { "times":FloatArray( 0, 81.9, 120.2, 160.4 ), "transitions":FloatArray( 1, 1, 1, 1 ), "update":0, "values":[ 3.0, 3.0, 1.0, 3.0 ] }
+tracks/7/keys = {
+"times": FloatArray( 0, 81.9, 120.2, 160.4 ),
+"transitions": FloatArray( 1, 1, 1, 1 ),
+"update": 0,
+"values": [ 3.0, 3.0, 1.0, 3.0 ]
+}
 tracks/8/type = "value"
 tracks/8/path = NodePath("MoonPath/PathFollow2D/Moon:transform/scale")
 tracks/8/interp = 2
 tracks/8/imported = false
-tracks/8/keys = { "times":FloatArray( 0, 188.5, 221.6, 240 ), "transitions":FloatArray( 1, 1, 1, 1 ), "update":0, "values":[ Vector2( 1, 1 ), Vector2( 3, 3 ), Vector2( 1, 1 ), Vector2( 1, 1 ) ] }
+tracks/8/keys = {
+"times": FloatArray( 0, 188.5, 221.6, 240 ),
+"transitions": FloatArray( 1, 1, 1, 1 ),
+"update": 0,
+"values": [ Vector2( 1, 1 ), Vector2( 3, 3 ), Vector2( 1, 1 ), Vector2( 1, 1 ) ]
+}
 
 [node name="Background" type="CanvasLayer"]
 
@@ -129,7 +205,7 @@ margin/top = 0.0
 margin/right = 0.0
 margin/bottom = 0.0
 texture = ExtResource( 2 )
-modulate = Color( 0.0651924, 0.0686763, 0.174457, 1 )
+modulate = Color( 0.177655, 0.179121, 0.225247, 1 )
 expand = true
 stretch_mode = 0
 
@@ -147,7 +223,7 @@ margin/top = 0.0
 margin/right = 0.0
 margin/bottom = 0.0
 texture = ExtResource( 3 )
-modulate = Color( 0.867188, 0.968872, 1, 0.824164 )
+modulate = Color( 0.867188, 0.968872, 1, 0.809062 )
 expand = true
 stretch_mode = 0
 
@@ -158,9 +234,9 @@ curve = SubResource( 1 )
 
 [node name="PathFollow2D" type="PathFollow2D" parent="MoonPath"]
 
-transform/pos = Vector2( -398.312, -962.916 )
+transform/pos = Vector2( -384.267, -957.676 )
 transform/rot = -1.53356
-offset = 3526.09
+offset = 3511.14
 h_offset = 0.0
 v_offset = 0.0
 rotate = false
@@ -172,9 +248,9 @@ lookahead = 4.0
 
 visibility/blend_mode = 1
 visibility/light_mask = 1025
-transform/scale = Vector2( 0.910435, 0.910435 )
+transform/scale = Vector2( 0.964796, 0.964796 )
 texture = ExtResource( 4 )
-modulate = Color( 0.918575, 0.918351, 0.947043, 1 )
+modulate = Color( 0.911582, 0.911338, 0.942494, 1 )
 
 [node name="Moonlight" type="Light2D" parent="MoonPath/PathFollow2D/Moon"]
 
@@ -186,7 +262,7 @@ texture = ExtResource( 5 )
 offset = Vector2( 0, 0 )
 scale = 8.0
 color = Color( 1, 0.964203, 0.800781, 1 )
-energy = 20.0
+energy = 5.0
 mode = 0
 range/height = 0.0
 range/z_min = -1024
@@ -208,9 +284,9 @@ curve = SubResource( 2 )
 
 [node name="PathFollow2D" type="PathFollow2D" parent="SunPath"]
 
-transform/pos = Vector2( -603.316, -50.8535 )
-transform/rot = -13.3743
-offset = 2952.03
+transform/pos = Vector2( -615.436, -53.8743 )
+transform/rot = -14.3148
+offset = 2939.51
 h_offset = 0.0
 v_offset = 0.0
 rotate = true
@@ -225,9 +301,9 @@ enabled = true
 editor_only = false
 texture = ExtResource( 5 )
 offset = Vector2( 0, 0 )
-scale = 4.98868
+scale = 5.23042
 color = Color( 0.339844, 0.132917, 0.0318604, 1 )
-energy = 25.2826
+energy = 25.3234
 mode = 0
 range/height = 0.0
 range/z_min = -1024
@@ -247,7 +323,7 @@ enabled = true
 editor_only = false
 texture = ExtResource( 5 )
 offset = Vector2( 0, 0 )
-scale = 3.03335
+scale = 3.03845
 color = Color( 1, 0.901733, 0.453125, 1 )
 energy = 100.0
 mode = 0
@@ -286,6 +362,7 @@ config/amount = 8
 config/lifetime = 80.0
 config/time_scale = 0.4
 config/preprocess = 160.0
+config/process_mode = 1
 config/half_extents = Vector2( 0, 64 )
 config/texture = ExtResource( 6 )
 params/direction = 270.0
@@ -321,6 +398,7 @@ config/amount = 6
 config/lifetime = 60.0
 config/time_scale = 0.1
 config/preprocess = 360.0
+config/process_mode = 1
 config/half_extents = Vector2( 0, 200 )
 config/texture = ExtResource( 6 )
 params/direction = 270.0
